@@ -14,6 +14,10 @@ TARGET_PREBUILT_KERNEL := $(DASH_KLEAF_OUT)/mgk_64_k66_kernel_aarch64.user/Image
 BOARD_KERNEL_IMAGE_NAME := Image.lz4
 
 BOARD_USES_GENERIC_KERNEL_IMAGE := true
+# Includes ACK ASB-2026-10-05_15-6.6
+BOOT_SECURITY_PATCH := 2026-10-01
+# Follows the system independently.
+INIT_BOOT_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
 BOARD_BOOT_HEADER_VERSION := 4
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 67108864
@@ -37,8 +41,9 @@ include $(DEVICE_PATH)/kernel/modules.mk
 
 # Build only the top-level vbmeta from current image descriptors.
 # Vendor stays on stock 305; retain its descriptor without rebuilding it.
+# Keep AVB metadata discovery and disable hashtree verification only.
 BOARD_AVB_ENABLE := true
 BOARD_AVB_KEY_PATH := vendor/lineage-priv/keys/avb.pk8
 BOARD_AVB_ALGORITHM := SHA256_RSA4096
-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 1
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_descriptors_from_image $(DASH_STOCK_INPUTS)/vbmeta_vendor.img
