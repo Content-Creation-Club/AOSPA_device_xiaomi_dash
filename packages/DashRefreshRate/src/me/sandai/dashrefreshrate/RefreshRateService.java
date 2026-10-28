@@ -8,6 +8,7 @@ package me.sandai.dashrefreshrate;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.ContentObserver;
 import android.hardware.display.DisplayManager;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -33,6 +34,7 @@ public final class RefreshRateService extends Service
     private RefreshRatePolicy mPolicy;
     private DisplayFeatureClient mDisplayFeatureClient;
     private RefreshRatePolicy.DisplayState mLastDisplayState;
+    private ContentObserver mRefreshRateObserver;
     private boolean mRetryScheduled;
     private final Runnable mRetrySync = () -> {
         mRetryScheduled = false;
@@ -52,6 +54,15 @@ public final class RefreshRateService extends Service
         mHandlerThread.start();
         mHandler = new Handler(mHandlerThread.getLooper());
         mDisplayManager.registerDisplayListener(this, mHandler);
+        mRefreshRateObserver = new ContentObserver(mHandler) {
+            @Override
+            public void onChange(boolean selfChange) {
+                syncDefaultDisplay(true);
+            }
+        };
+        getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.MIN_REFRESH_RATE),
+                false, mRefreshRateObserver);
         mHandler.post(() -> syncDefaultDisplay(true));
     }
 
@@ -64,6 +75,7 @@ public final class RefreshRateService extends Service
     @Override
     public void onDestroy() {
         mDisplayManager.unregisterDisplayListener(this);
+        getContentResolver().unregisterContentObserver(mRefreshRateObserver);
         mHandler.removeCallbacks(mRetrySync);
         mHandlerThread.quitSafely();
         super.onDestroy();
