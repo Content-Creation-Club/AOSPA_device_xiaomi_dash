@@ -1,5 +1,7 @@
 # Copyright (C) 2026 YorokobiMaster
 # SPDX-License-Identifier: Apache-2.0
 
-# RRO mapping needs to read LineageParts under its restricted APK label.
-r_dir_file(idmap, lineage_privapp_pkg_file)
+# RRO mapping needs to read privileged APKs under PA's generic system_file label.
+allow idmap system_file:dir { open read getattr search };
+allow idmap system_file:file { open read getattr map };
+allow idmap system_file:lnk_file { open read getattr };

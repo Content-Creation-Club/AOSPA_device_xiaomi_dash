@@ -1,0 +1,9 @@
+# Copyright (C) 2026 YorokobiMaster
+# SPDX-License-Identifier: Apache-2.0
+
+# PA's source-side default Health policy references these retained vendor types.
+# dash-health uses the stock sysfs types declared by the system_ext adapters.
+not_recovery(`
+type vendor_sysfs_battery_supply;
+type vendor_sysfs_usb_supply;
+')

@@ -1,0 +1,12 @@
+java_defaults {
+    name: "qcomfeatureconfig_java_defaults",
+    static_libs: ["qcomFeatureConfigLib_system"],
+}
+
+cc_defaults {
+    name: "qcomfeatureconfig_cc_defaults",
+}
+
+cc_library_headers {
+    name: "qti_kernel_headers",
+}

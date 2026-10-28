@@ -1,5 +1,0 @@
-# Copyright (C) 2026 YorokobiMaster
-# SPDX-License-Identifier: Apache-2.0
-
-# The device-specific system_server service owns the requested vendor level.
-set_prop(system_server, dash_eyecare_prop)

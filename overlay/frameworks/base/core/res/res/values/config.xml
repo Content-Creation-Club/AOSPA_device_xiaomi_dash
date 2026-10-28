@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- VoLTE available -->
+    <!-- Resource arrays replace rather than merge; keep the complete startup list here. -->
+    <string-array name="config_deviceSpecificSystemServices" translatable="false">
+        <item>me.sandai.dashfod.DashFodService</item>
+        <item>me.sandai.dashpower.DashPowerService</item>
+    </string-array>
 
     <!-- 5G modes supported by the retained MediaTek radio stack -->
     <bool name="config_telephony5gStandalone">true</bool>
@@ -16,8 +20,6 @@
         M 0,0 H -33 V 152 H 33 V 0 H 0 Z
     </string>
 
-    <!-- Display shape -->
-
     <!-- UDFPS Sensor Properties: [sensorLocationX, sensorLocationY, sensorRadius] -->
     <integer-array name="config_udfps_sensor_props" translatable="false">
         <item>640</item>
@@ -30,15 +32,5 @@
          through SystemUI's doze service. -->
     <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>
 
-    <!-- Whether device supports double tap to wake -->
-
-    <!-- AOSP Screen attention, backed by dash's front-camera AOV pipeline. -->
-
-    <!-- DashFod arms the fingerprint extension only after Doze is visible. -->
-
-    <!-- Default the screen-off UDFPS switch on: a fresh flash should have
-         working AOD fingerprint out of the box. AmbientDisplayConfiguration
-         and the Settings toggle both resolve an unset secure key from this,
-         and DashFod falls back to it too. -->
 
 </resources>

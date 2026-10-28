@@ -3,3 +3,11 @@
 
 # Retained vendor battery type shared by health and Power clients.
 type sysfs_battery_supply;
+
+# Types owned by the retained vendor policy.
+type hal_batteryantiaging_default, domain;
+type sysfs_ti_battery;
+
+# BatteryAntiAging enumerates cp_master/type under this vendor label.
+allow hal_batteryantiaging_default sysfs_ti_battery:dir search;
+allow hal_batteryantiaging_default sysfs_ti_battery:file { getattr open read };

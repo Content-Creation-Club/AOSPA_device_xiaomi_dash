@@ -33,6 +33,9 @@ TARGET_COPY_OUT_ODM := odm
 TARGET_COPY_OUT_SYSTEM_DLKM := system_dlkm
 TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 TARGET_COPY_OUT_ODM_DLKM := odm_dlkm
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := erofs
 
 BOARD_USES_METADATA_PARTITION := true
 
@@ -53,18 +56,17 @@ BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 25477120
 BOARD_VENDOR_DLKMIMAGE_EROFS_COMPRESSOR := lz4hc,level=12
 BOARD_VENDOR_DLKMIMAGE_EROFS_PCLUSTER_SIZE := 16384
 
-SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += \
-    $(DEVICE_PATH)/sepolicy/system_ext/private
-
 DASH_HARDWARE_PATH ?= hardware/xiaomi/dash
 include $(DASH_HARDWARE_PATH)/BoardConfig.mk
 
-include $(DEVICE_PATH)/fod/BoardConfig.mk
+BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += \
+    $(DEVICE_PATH)/sepolicy/system_ext/private
+
+include $(DEVICE_PATH)/display/brightness/BoardConfig.mk
 include $(DEVICE_PATH)/power/BoardConfig.mk
+include $(DEVICE_PATH)/fod/BoardConfig.mk
 include $(DEVICE_PATH)/ims/BoardConfig.mk
-include $(DEVICE_PATH)/display/livedisplay/BoardConfig.mk
 
 # BoardConfig is loaded separately from product inheritance.
-ifeq ($(TARGET_PRODUCT),lineage_dash)
-include $(DEVICE_PATH)/BoardConfigLineage.mk
-endif
+include $(DEVICE_PATH)/health/BoardConfig.mk

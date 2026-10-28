@@ -1,4 +1,0 @@
-# Copyright (C) 2026 YorokobiMaster
-# SPDX-License-Identifier: Apache-2.0
-
-/(system_ext|system/system_ext)/bin/hw/dash-livedisplay  u:object_r:dash_livedisplay_exec:s0

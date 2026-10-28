@@ -11,6 +11,4 @@
     <!-- Physical display pixel pitch in micrometers, used to size the UDFPS icon -->
     <item name="pixel_pitch" format="float" type="dimen">56.82</item>
 
-    <!-- Physical geometry for the portrait PIN bouncer's UDFPS marker. -->
-
 </resources>

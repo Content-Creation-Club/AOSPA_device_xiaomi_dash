@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lineage_dash.mk
+    $(LOCAL_DIR)/aospa_dash.mk
 
 COMMON_LUNCH_CHOICES := \
-    lineage_dash-cp2a-userdebug
+    aospa_dash-userdebug

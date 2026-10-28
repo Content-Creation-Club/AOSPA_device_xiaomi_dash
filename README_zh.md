@@ -1,11 +1,11 @@
-Xiaomi dash 的设备树
+AOSPA Xiaomi dash 设备树
 =============================================
 
 [EN](README.md) | 简体中文
 
 Redmi Turbo 5 Max 是一款~~拿上一代MTK旗舰芯片阉割后的~~MTK正代满血高性能旗舰。具体配置请看下文。
 
-因为没有Poco，只能做国行版本。目前只适配了 LineageOS 24.0。
+本设备树适配国行 Redmi Turbo 5 Max 的 AOSPA。
 
 ## 功能
 
