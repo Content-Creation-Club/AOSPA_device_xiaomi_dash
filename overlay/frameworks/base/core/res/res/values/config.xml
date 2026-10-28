@@ -33,5 +33,9 @@
          through SystemUI's doze service. -->
     <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>
 
+    <!-- The camera ring is not a charging indicator. -->
+    <integer name="config_notificationsBatteryLowARGB">0</integer>
+    <integer name="config_notificationsBatteryMediumARGB">0</integer>
+    <integer name="config_notificationsBatteryFullARGB">0</integer>
 
 </resources>
