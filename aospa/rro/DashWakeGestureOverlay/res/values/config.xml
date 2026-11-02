@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2026 YorokobiMaster
+     SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <!-- AOSPA consumes KEY_WAKEUP in its screen-off gesture handler. -->
+    <bool name="config_enableKeyHandler">true</bool>
+    <!-- KeyHandler matches Linux scan codes; KEY_WAKEUP is 143. -->
+    <integer name="config_doubleTapKeyCode">143</integer>
+    <integer name="config_doubleTapDefault">1</integer>
+</resources>

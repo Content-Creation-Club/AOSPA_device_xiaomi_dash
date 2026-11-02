@@ -147,6 +147,8 @@ PRODUCT_PRODUCT_PROPERTIES += \
     ro.support_one_handed_mode=true
 
 # Overlays
+PRODUCT_PACKAGES += DashWakeGestureOverlay
+
 $(call inherit-product, vendor/aospa/overlay/overlays.mk)
 
 # Overlays (Translations)
