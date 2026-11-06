@@ -6,5 +6,7 @@ package vendor.mediatek.hardware.mtkpower;
 // verified against its BpMtkPowerService; not a full frozen interface or server.
 interface IMtkPowerService {
     int perfCusLockHint(int hint, int durationMs, int pid) = 0;
+    int perfLockAcquire(int handle, int durationMs, in int[] resources, int pid, int tid) = 1;
     int perfLockReleaseSync(int handle, int reserved) = 3;
+    int perfCusLockHintWithData(int hint, int durationMs, int pid, in int[] resources) = 11;
 }

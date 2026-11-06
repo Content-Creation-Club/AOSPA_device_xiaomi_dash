@@ -43,7 +43,7 @@ public final class DashPowerService extends SystemService {
         policy = new PowerPolicy(new PowerPolicy.Worker() {
             @Override public void execute(Runnable task) { handler.post(task); }
             @Override public void after(int ms, Runnable task) { handler.postDelayed(task, ms); }
-        }, new MtkPowerClient(() -> policy.disconnected()));
+        }, new MtkPowerClient(handler, () -> policy.disconnected()));
         SystemProperties.addChangeCallback(() ->
                 policy.setEnabled(SystemProperties.getBoolean(ENABLED, true)));
         policy.setEnabled(SystemProperties.getBoolean(ENABLED, true));

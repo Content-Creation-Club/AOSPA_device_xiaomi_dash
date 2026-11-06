@@ -13,5 +13,21 @@ final class ThermalProfiles {
                 || id == 20 || id == 25;
     }
 
+    static int frameHint(int profile) {
+        switch (profile) {
+            case 19: case 20: case 25: return AppModePolicy.GAME_HINT;
+            case 15: return AppModePolicy.CAMERA_HINT;
+            default: return 0;
+        }
+    }
+
+    static int gpuProfile(int profile) {
+        return profile == 6 || profile == 20 || profile == 25 ? profile : 0;
+    }
+
+    static int dramFloorOpp(int profile) {
+        return profile == 6 || profile == 25 ? GamingPowerPolicy.EXTREME_DRAM_OPP : -1;
+    }
+
     private ThermalProfiles() {}
 }

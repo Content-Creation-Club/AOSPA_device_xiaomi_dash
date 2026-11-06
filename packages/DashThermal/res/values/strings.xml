@@ -37,13 +37,19 @@
     <string name="profile_default_summary">Default scheduling policy, suitable for most apps</string>
     <string name="profile_everyday_summary">Designed for frequently used foreground apps</string>
     <string name="profile_video_summary">Keeps extended video playback cooler and stable</string>
-    <string name="profile_standard_summary">Standard CPU and thermal limits</string>
-    <string name="profile_enhanced_summary">Higher CPU limits and thermal thresholds</string>
-    <string name="profile_extreme_summary">Widest GPU and thermal operating range</string>
+    <string name="profile_standard_summary">Standard game thermal limits and frame scheduling</string>
+    <string name="profile_enhanced_summary">Higher CPU limits and reduced early GPU throttling</string>
+    <string name="profile_extreme_summary">Higher memory bandwidth floor and more sustained GPU headroom, with increased power use</string>
+    <string name="profile_evaluation_summary">Relaxed GPU throttling and a higher memory bandwidth floor, with increased power use</string>
+    <string name="profile_navigation_summary">Thermal policy for extended navigation</string>
+    <string name="profile_camera_summary">Camera thermal policy and frame scheduling</string>
+    <string name="profile_transfer_summary">Thermal policy for device transfer and data migration</string>
+    <string name="profile_arvr_summary">Thermal policy for AR and VR workloads</string>
+    <string name="profile_demo_summary">Thermal policy for continuous demonstrations</string>
 
     <string name="profile_unknown">Unknown policy (%1$d)</string>
 
-    <string name="detail_footer">Manual profiles stay fixed across Performance Mode changes and override event scenarios.</string>
+    <string name="detail_footer">Manual profiles control app scheduling and stay fixed across Performance Mode and event changes.</string>
     <string name="performance_mode_title">Performance Mode</string>
     <string name="performance_mode_summary">Relaxes selected scheduling limits. May increase battery usage.</string>
 </resources>
