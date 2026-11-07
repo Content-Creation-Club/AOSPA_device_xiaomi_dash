@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2026 YorokobiMaster; SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <!-- Match the three intensity levels supported by the vibrator adapter. -->
+    <integer name="config_vibration_supported_intensity_levels">3</integer>
+</resources>
