@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote name="dash-sense" fetch="ssh://git@github-master" />
+  <project path="packages/apps/ParanoidSense"
+           name="AOSPA/android_packages_apps_ParanoidSense"
+           remote="dash-sense"
+           revision="b522a895b6b4a0f4fca48a6094101a9196c50356"
+           upstream="refs/heads/calcite" />
+</manifest>
