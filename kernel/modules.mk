@@ -538,4 +538,6 @@ BOARD_VENDOR_KERNEL_MODULES := \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/xiaomi_touch_dash.ko
 
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(file <$(DEVICE_PATH)/kernel/modules.load.platform))
+# Retain OrangeFox's first-stage recovery loading separately from normal boot.
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(file <$(DEVICE_PATH)/kernel/modules.load.recovery))
 BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(file <$(DEVICE_PATH)/kernel/modules.load.vendor_dlkm))
