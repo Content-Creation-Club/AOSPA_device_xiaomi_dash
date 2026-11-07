@@ -54,7 +54,9 @@ $(call inherit-product, $(DEVICE_PATH)/configs/properties.mk)
 # Display
 PRODUCT_PACKAGES += \
     DashRefreshRate \
+    dash-eyecare \
     dash-displayfeature-compat
+PRODUCT_SYSTEM_SERVER_JARS_EXTRA += system_ext:dash-eyecare
 
 # Init
 PRODUCT_PACKAGES += \

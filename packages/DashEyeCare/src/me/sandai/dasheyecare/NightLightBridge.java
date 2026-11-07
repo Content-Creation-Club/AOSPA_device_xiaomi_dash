@@ -7,8 +7,11 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.hardware.display.ColorDisplayManager;
+import android.os.Binder;
 import android.os.Handler;
-import android.os.SystemProperties;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
@@ -16,12 +19,18 @@ import android.util.Log;
 import com.android.internal.os.BackgroundThread;
 import com.android.server.SystemService;
 
-/** Night Light owns UI, scheduling and persistence; this service bridges to the vendor adapter. */
+import vendor.xiaomi.hardware.displayfeature_aidl.IDisplayFeature;
+
+/** Night Light owns UI, scheduling and persistence; the Xiaomi HAL applies the tint. */
 public final class NightLightBridge extends SystemService {
-    private static final String PROPERTY = "sys.dash.livedisplay.eyecare";
+    private static final String DISPLAY_FEATURE_SERVICE = IDisplayFeature.DESCRIPTOR + "/default";
+    private static final int FEATURE_SCREEN_EYECARE = 3;
+    private static final int COOKIE = 255;
     private Handler handler;
     // Accessed only on the background handler.
     private int currentUser = UserHandle.USER_SYSTEM;
+    private IBinder displayBinder;
+    private int appliedLevel = -1;
     private final Runnable sync = this::syncCurrentUser;
 
     public NightLightBridge(Context context) {
@@ -89,11 +98,28 @@ public final class NightLightBridge extends SystemService {
             int level = NightLightLevel.fromTemperature(enabled, temperature,
                     ColorDisplayManager.getMinimumColorTemperature(context), defaultTemperature,
                     ColorDisplayManager.getMaximumColorTemperature(context));
-            String requested = Integer.toString(level);
-            if (!requested.equals(SystemProperties.get(PROPERTY))) {
-                SystemProperties.set(PROPERTY, requested);
+            IBinder binder = ServiceManager.checkService(DISPLAY_FEATURE_SERVICE);
+            if (binder == null) {
+                throw new IllegalStateException("Xiaomi displayfeature service unavailable");
             }
-        } catch (RuntimeException error) {
+            if (binder != displayBinder) {
+                binder.linkToDeath(() -> handler.post(() -> {
+                    if (displayBinder == binder) {
+                        displayBinder = null;
+                        appliedLevel = -1;
+                        scheduleSync();
+                    }
+                }), 0);
+                displayBinder = binder;
+                appliedLevel = -1;
+            }
+            if (level != appliedLevel) {
+                IDisplayFeature.Stub.asInterface(Binder.allowBlocking(binder))
+                        .setFeature(0, FEATURE_SCREEN_EYECARE, level, COOKIE);
+                appliedLevel = level;
+            }
+        } catch (RemoteException | RuntimeException error) {
+            appliedLevel = -1;
             Log.e("NightLightBridge", "Cannot synchronize Night Light", error);
             handler.removeCallbacks(sync);
             handler.postDelayed(sync, 1000);

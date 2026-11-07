@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2026 YorokobiMaster; SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <!-- Night Light owns the controls and schedule; DashEyeCare applies vendor
+         displayfeature mode 3 without requiring HWC color transforms. -->
+    <bool name="config_nightDisplayAvailable">true</bool>
+
+    <!-- Identity matrices prevent the framework from applying a second tint. -->
+    <string-array name="config_nightDisplayColorTemperatureCoefficients">
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+    </string-array>
+    <string-array name="config_nightDisplayColorTemperatureCoefficientsNative">
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+    </string-array>
+</resources>

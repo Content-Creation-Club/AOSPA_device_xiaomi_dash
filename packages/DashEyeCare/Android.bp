@@ -5,7 +5,11 @@ package { default_applicable_licenses: ["Android-Apache-2.0"] }
 java_library {
     name: "dash-eyecare",
     srcs: ["src/**/*.java"],
-    libs: ["services.core"],
+    // dash-brightness supplies the AIDL classes on the system server classpath.
+    libs: [
+        "services.core",
+        "vendor.xiaomi.hardware.displayfeature_aidl-V2-java",
+    ],
     platform_apis: true,
     system_ext_specific: true,
     installable: true,
