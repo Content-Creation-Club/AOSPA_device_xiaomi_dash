@@ -44,6 +44,12 @@
         android:title="@*com.android.settings:string/summary_placeholder"
         settings:controller="com.android.settings.fuelgauge.batterytip.BatteryTipPreferenceController" />
 
+    <Preference
+        android:key="battery_info"
+        android:title="@*com.android.settings:string/battery_info"
+        android:fragment="com.android.settings.deviceinfo.batteryinfo.BatteryInfoFragment"
+        settings:keywords="@*com.android.settings:string/keywords_battery_info"/>
+
     <com.android.settingslib.widget.UntitledPreferenceCategory
         android:key="power_usage_summary_category">
         <Preference
@@ -66,30 +72,24 @@
             android:title="@*com.android.settings:string/smart_battery_manager_title"
             settings:controller="com.android.settings.fuelgauge.batterytip.BatteryManagerPreferenceController"
             settings:keywords="@*com.android.settings:string/keywords_battery_adaptive_preferences" />
-
-        <!-- Battery light -->
-        <lineageos.preference.LineagePartsPreference
-            android:key="battery_lights"
-            settings:requiresConfig="@*lineageos.platform:integer/config_deviceLightCapabilities"
-            settings:requiresConfigMask="64" />
     </com.android.settingslib.widget.UntitledPreferenceCategory>
 
     <com.android.settingslib.widget.UntitledPreferenceCategory
         android:key="charging_category">
-        <!-- Charging control -->
-        <lineageos.preference.LineagePartsPreference
+        <Preference
             android:key="charging_control"
-            settings:requiresService="healthinterface" />
+            android:title="@*com.android.settings:string/charging_control_title"
+            android:summary="@*com.android.settings:string/charging_control_summary"
+            android:fragment="co.aospa.settings.lineage.health.ChargingControlSettings"
+            settings:controller="co.aospa.settings.lineage.health.ChargingControlPreferenceController" />
 
-        <!-- Charging speed -->
         <ListPreference
-            android:entries="@*lineageos.platform:array/charging_speed_entries"
-            android:entryValues="@*lineageos.platform:array/charging_speed_values"
+            android:entries="@*android:array/charging_speed_entries"
+            android:entryValues="@*android:array/charging_speed_values"
             android:key="charging_speed"
             android:summary="%s"
-            android:title="@*lineageos.platform:string/charging_speed"
-            settings:controller="com.android.settings.fuelgauge.ChargingSpeedPreferenceController"
-            settings:requiresService="lineagehealth" />
+            android:title="@*android:string/charging_speed"
+            settings:controller="co.aospa.settings.lineage.health.ChargingSpeedPreferenceController" />
     </com.android.settingslib.widget.UntitledPreferenceCategory>
 
     <com.android.settingslib.widget.UntitledPreferenceCategory
@@ -101,14 +101,9 @@
             settings:controller="com.android.settings.display.BatteryPercentagePreferenceController" />
     </com.android.settingslib.widget.UntitledPreferenceCategory>
 
-    <Preference
-        android:key="battery_info"
-        android:title="@*com.android.settings:string/battery_info"
-        android:fragment="com.android.settings.deviceinfo.batteryinfo.BatteryInfoFragment"
-        settings:keywords="@*com.android.settings:string/keywords_battery_info"/>
-
     <com.android.settingslib.widget.FooterPreference
         android:key="power_usage_footer"
         android:title="@*com.android.settings:string/battery_footer_summary"
         settings:searchable="false" />
+
 </PreferenceScreen>

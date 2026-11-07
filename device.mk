@@ -71,6 +71,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 
 PRODUCT_PACKAGES += \
     DashFrameworkResOverlay \
+    DashSettingsOverlay \
     DashSettingsProviderOverlay \
     DashTelecommOverlay \
     DashTelephonyOverlay \

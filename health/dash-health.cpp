@@ -200,7 +200,7 @@ int main() {
   auto service = ndk::SharedRefBase::make<ChargingControl>();
 
   const std::string instance =
-      "vendor.system.health.IChargingControl/default";
+      std::string(ChargingControl::descriptor) + "/default";
   binder_status_t status =
       AServiceManager_addService(service->asBinder().get(), instance.c_str());
   if (status != STATUS_OK) {

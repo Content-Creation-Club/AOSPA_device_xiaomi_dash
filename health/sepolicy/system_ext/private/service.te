@@ -1,0 +1,7 @@
+# Copyright (C) 2026 YorokobiMaster
+# SPDX-License-Identifier: Apache-2.0
+
+# The retained vendor does not carry PA's charging-control service policy.
+type dash_charging_service, service_manager_type, hal_service_type;
+hal_attribute_service(hal_lineage_health, dash_charging_service)
+binder_call(hal_lineage_health_client, hal_lineage_health_server)
