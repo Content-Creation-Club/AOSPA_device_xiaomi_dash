@@ -5,4 +5,5 @@ PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/aospa_dash.mk
 
 COMMON_LUNCH_CHOICES := \
+    aospa_dash-user \
     aospa_dash-userdebug
