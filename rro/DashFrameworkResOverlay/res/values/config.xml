@@ -4,6 +4,10 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources>
+    <!-- Enable whole-display color controls and Extra dim. Per-layer support
+         stays disabled; Night Light keeps its vendor tint via eyecare.xml. -->
+    <bool name="config_setColorTransformAccelerated">true</bool>
+
     <string name="config_mainDisplayShape" translatable="false">M20 0h1240s20 0 20 20v2732s0 20 -20 20h-1240s-20 0 -20 -20v-2732s0 -20 20 -20</string>
     <!-- Always-on display is opt-in and independent of DashWake gestures. -->
     <bool name="config_dozeAlwaysOnEnabled">false</bool>
