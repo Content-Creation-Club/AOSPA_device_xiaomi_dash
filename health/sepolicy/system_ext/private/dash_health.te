@@ -19,6 +19,10 @@ binder_call(dash_health, servicemanager)
 # NDK binder opens /sys/kernel/tracing/trace_marker on the first transaction.
 dontaudit dash_health self:capability { dac_override dac_read_search };
 
+# F2FS probes CAP_SYS_RESOURCE when reserving blocks for the saved mode.
+# Denying reserved-root access is expected; normal file writes still succeed.
+dontaudit dash_health self:global_capability_class_set sys_resource;
+
 # Keep vendor labels so existing MiCharge/thermal clients retain access.
 allow dash_health sysfs_battery_supply:file { getattr open read write };
 allow dash_health sysfs_batteryinfo:dir search;
