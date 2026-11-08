@@ -5,6 +5,9 @@ DASH_KLEAF_OUT := kernel/xiaomi/dash/bazel-bin/kernel_device_modules-6.6
 DASH_KERNEL_INPUTS := vendor/xiaomi/dash/kernel-inputs
 DASH_STOCK_INPUTS := vendor/xiaomi/dash/stock-305
 
+# Kleaf owns its retained cache and Bazel symlinks in the shared workspace.
+BUILD_BROKEN_SRC_DIR_RW_ALLOWLIST += $(realpath kernel/xiaomi/dash)
+
 TARGET_NO_KERNEL := false
 TARGET_KERNEL_SOURCE := kernel/xiaomi/dash/kernel-6.6
 TARGET_KERNEL_CONFIG := gki_defconfig

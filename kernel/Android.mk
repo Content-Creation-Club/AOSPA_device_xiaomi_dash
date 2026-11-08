@@ -4,6 +4,17 @@
 LOCAL_PATH := $(call my-dir)
 ifeq ($(TARGET_DEVICE),dash)
 
+# Build explicitly before image packaging so Ninja observes the updated shared
+# module inputs in the packaging invocation. Kati must not own cache outputs
+# reached through a source-tree symlink.
+.PHONY: kernel
+kernel: PRIVATE_KERNEL_BUILD_SCRIPT := $(LOCAL_PATH)/build-kleaf.sh
+kernel:
+	@echo "Kleaf: dash shared kernel and modules"
+	$(hide) bash $(PRIVATE_KERNEL_BUILD_SCRIPT)
+	$(hide) mkdir -p $(PRODUCT_OUT)
+	$(hide) if ! cmp -s $(TARGET_PREBUILT_KERNEL) $(PRODUCT_OUT)/kernel; then cp -f $(TARGET_PREBUILT_KERNEL) $(PRODUCT_OUT)/kernel; fi
+
 # PA skips kernel compilation rules when a prebuilt Image is selected.
 $(eval $(call copy-one-file,$(TARGET_PREBUILT_KERNEL),$(PRODUCT_OUT)/kernel))
 
