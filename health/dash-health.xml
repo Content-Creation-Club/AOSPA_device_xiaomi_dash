@@ -3,5 +3,6 @@
         <name>vendor.lineage.health</name>
         <version>2</version>
         <fqname>IChargingControl/default</fqname>
+        <fqname>IFastCharge/default</fqname>
     </hal>
 </manifest>

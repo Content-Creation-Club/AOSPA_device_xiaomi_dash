@@ -3,13 +3,14 @@
 
 cc_binary {
     name: "dash-health",
-    srcs: ["dash-health.cpp"],
+    srcs: ["dash-health.cpp", "FastCharge.cpp"],
     static_libs: [
         "vendor.lineage.health-V2-ndk",
     ],
     shared_libs: [
         "libbase",
         "libbinder_ndk",
+        "libcutils",
     ],
     system_ext_specific: true,
     relative_install_path: "hw",

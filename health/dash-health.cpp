@@ -15,6 +15,8 @@
 #include <aidl/vendor/lineage/health/BnChargingControl.h>
 #include <aidl/vendor/lineage/health/ChargingControlSupportedMode.h>
 
+#include "FastCharge.h"
+
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -207,6 +209,18 @@ int main() {
     LOG(ERROR) << "Failed to publish " << instance << ": " << status;
     return 1;
   }
+
+  auto fastCharge = ndk::SharedRefBase::make<dash::FastCharge>();
+  if (!fastCharge->init()) return 1;
+  const std::string fastChargeInstance =
+      std::string(dash::FastCharge::descriptor) + "/default";
+  status = AServiceManager_addService(fastCharge->asBinder().get(),
+                                     fastChargeInstance.c_str());
+  if (status != STATUS_OK) {
+    LOG(ERROR) << "Failed to publish " << fastChargeInstance << ": " << status;
+    return 1;
+  }
+  fastCharge->start();
 
   ABinderProcess_startThreadPool();
   ABinderProcess_joinThreadPool();

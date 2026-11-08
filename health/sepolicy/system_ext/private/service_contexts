@@ -2,3 +2,4 @@
 # SPDX-License-Identifier: Apache-2.0
 
 vendor.lineage.health.IChargingControl/default u:object_r:dash_charging_service:s0
+vendor.lineage.health.IFastCharge/default u:object_r:dash_charging_service:s0
