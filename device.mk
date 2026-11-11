@@ -76,6 +76,8 @@ PRODUCT_PACKAGES += \
     DashFrameworkResOverlay \
     DashSettingsOverlay \
     DashSettingsProviderOverlay \
+    DashPocoGlobalSettingsProviderOverlay \
+    DashPocoIndiaSettingsProviderOverlay \
     DashSystemUIOverlay \
     DashTelecommOverlay \
     DashTelephonyOverlay \
