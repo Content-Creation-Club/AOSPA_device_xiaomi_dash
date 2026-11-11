@@ -12,6 +12,7 @@ $(call inherit-product, $(DEVICE_PATH)/fod/fod.mk)
 $(call inherit-product, $(DEVICE_PATH)/display/brightness/brightness.mk)
 $(call inherit-product, $(DEVICE_PATH)/power/power.mk)
 $(call inherit-product, $(DEVICE_PATH)/ims/ims.mk)
+$(call inherit-product, $(DEVICE_PATH)/esim/esim.mk)
 
 # Product additions
 $(call inherit-product-if-exists, vendor/xiaomi/dash-miuicamera/miuicamera.mk)
