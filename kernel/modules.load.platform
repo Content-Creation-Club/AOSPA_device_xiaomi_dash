@@ -237,3 +237,6 @@ block2mtd.ko
 chipreg.ko
 mtdblock.ko
 mtd.ko
+libarc4.ko
+rfkill.ko
+bluetooth.ko

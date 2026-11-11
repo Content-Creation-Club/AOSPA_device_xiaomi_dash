@@ -6,6 +6,7 @@
 # Exported-symbol coverage was checked against these modules and vmlinux;
 # broad MTK modinfo provider names are not a device-specific allowlist.
 
+# Load the matching signed GKI modules before the retained stock system_dlkm.
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES := \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/8250_mtk.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/adapter_class.ko \
@@ -17,6 +18,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES := \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/arm_smmu_v3.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66.user/drivers/mtd/devices/block2mtd.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/blocktag.ko \
+    $(DASH_GKI_CORE_OUT)/bluetooth.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/bootprof.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/bq28z610.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/bus-parity.ko \
@@ -76,7 +78,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES := \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/leds-mtk-disp.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/leds-mtk-pwm.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/leds-mtk.ko \
-    $(DASH_KLEAF_OUT)/mgk_64_k66.user/lib/crypto/libarc4.ko \
+    $(DASH_GKI_CORE_OUT)/libarc4.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/load_track.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/log_store.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/mca_charge_mievent.ko \
@@ -224,7 +226,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES := \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/pwm-mtk-disp.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66.user/drivers/power/reset/reboot-mode.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/reset-ti-syscon.ko \
-    $(DASH_KLEAF_OUT)/mgk_64_k66.user/net/rfkill/rfkill.ko \
+    $(DASH_GKI_CORE_OUT)/rfkill.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/rpmb-mtk.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/rpmb.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/rps_perf.ko \
@@ -284,7 +286,6 @@ BOARD_VENDOR_KERNEL_MODULES := \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/perf-actuator.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/miicmpfilter.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/xm_power.ko \
-    $(DASH_KLEAF_OUT)/mgk_64_k66.user/net/bluetooth/bluetooth.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/board_temp.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/bq25985_charger.ko \
     $(DASH_KLEAF_OUT)/mgk_64_k66_customer_modules_install.user/btmtk_uart_unify.ko \
@@ -541,3 +542,8 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(file <$(DEVICE_PATH)/kerne
 # Retain OrangeFox's first-stage recovery loading separately from normal boot.
 BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(file <$(DEVICE_PATH)/kernel/modules.load.recovery))
 BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(file <$(DEVICE_PATH)/kernel/modules.load.vendor_dlkm))
+
+# The same core is used by normal boot and recovery; both need the bootstrap.
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES += $(DASH_WLUN_OUT)/ufs_wlun_bootstrap.ko
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := ufs_wlun_bootstrap.ko $(BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD)
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := ufs_wlun_bootstrap.ko $(BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD)

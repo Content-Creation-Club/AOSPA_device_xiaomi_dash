@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 DASH_KLEAF_OUT := kernel/xiaomi/dash/bazel-bin/kernel_device_modules-6.6
+DASH_WLUN_OUT := $(DASH_KLEAF_OUT)/$(if $(filter true,$(DASH_STRICT_GKI) $(DASH_OFFICIAL_GKI)),ufs_wlun_bootstrap_strict.user,ufs_wlun_bootstrap.user)
+DASH_GKI_CORE_OUT := $(DASH_KLEAF_OUT)/$(if $(filter true,$(DASH_STRICT_GKI)),kernel_strict.user,mgk_64_k66_kernel_aarch64.user)
+ifeq ($(DASH_OFFICIAL_GKI),true)
+DASH_GKI_CORE_OUT := kernel/xiaomi/dash/out/bazel/repositories/dash_official_gki/android15-6.6-2026-10_r3
+endif
 DASH_KERNEL_INPUTS := vendor/xiaomi/dash/kernel-inputs
 DASH_STOCK_INPUTS := vendor/xiaomi/dash/stock-305
 
@@ -13,7 +18,7 @@ TARGET_KERNEL_SOURCE := kernel/xiaomi/dash/kernel-6.6
 TARGET_KERNEL_CONFIG := gki_defconfig
 TARGET_KERNEL_VERSION := 6.6
 TARGET_FORCE_PREBUILT_KERNEL := true
-TARGET_PREBUILT_KERNEL := $(DASH_KLEAF_OUT)/mgk_64_k66_kernel_aarch64.user/Image.lz4
+TARGET_PREBUILT_KERNEL := $(DASH_GKI_CORE_OUT)/Image.lz4
 BOARD_KERNEL_IMAGE_NAME := Image.lz4
 
 BOARD_USES_GENERIC_KERNEL_IMAGE := true
@@ -43,7 +48,14 @@ BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 BOARD_VENDOR_RAMDISK_FRAGMENT.recovery.PREBUILT := $(DASH_KERNEL_INPUTS)/recovery.cpio.gz
 
 BOARD_USES_VENDOR_DLKMIMAGE := true
+# Kleaf strips distribution modules before signing. Keep GKI signatures.
+BOARD_DO_NOT_STRIP_VENDOR_RAMDISK_MODULES := true
+BOARD_DO_NOT_STRIP_VENDOR_MODULES := true
 include $(DEVICE_PATH)/kernel/modules.mk
+
+ifneq ($(filter true,$(DASH_BUILD_SYSTEM_DLKM) $(DASH_STRICT_GKI) $(DASH_OFFICIAL_GKI)),)
+include $(DEVICE_PATH)/kernel/system-dlkm.mk
+endif
 
 # Build only the top-level vbmeta from current image descriptors.
 # Vendor stays on stock 305; retain its descriptor without rebuilding it.
