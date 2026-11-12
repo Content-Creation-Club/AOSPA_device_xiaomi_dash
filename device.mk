@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 DEVICE_PATH := device/xiaomi/dash
+include $(DEVICE_PATH)/kernel/profile.mk
 
 # Shared hardware implementation.
 DASH_HARDWARE_PATH ?= hardware/xiaomi/dash
@@ -39,7 +40,7 @@ PRODUCT_BUILD_ODM_IMAGE := false
 PRODUCT_BUILD_ODM_DLKM_IMAGE := false
 PRODUCT_BUILD_VENDOR_IMAGE := false
 PRODUCT_BUILD_RECOVERY_IMAGE := false
-PRODUCT_BUILD_SYSTEM_DLKM_IMAGE := $(if $(filter true,$(DASH_BUILD_SYSTEM_DLKM) $(DASH_STRICT_GKI) $(DASH_OFFICIAL_GKI)),true,false)
+PRODUCT_BUILD_SYSTEM_DLKM_IMAGE := $(DASH_SYSTEM_DLKM)
 PRODUCT_BUILD_VBMETA_IMAGE := false
 
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
@@ -47,7 +48,17 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
 
 PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH) \
+    $(DEVICE_PATH)/kernel \
     vendor/xiaomi/dash
+
+PRODUCT_PACKAGES += \
+    kernel \
+    kernel_recovery_load \
+    kernel_modules_vendor_ramdisk \
+    kernel_modules_vendor_dlkm
+ifeq ($(DASH_SYSTEM_DLKM),true)
+PRODUCT_PACKAGES += kernel_modules_system_dlkm
+endif
 
 # Properties
 $(call inherit-product, $(DEVICE_PATH)/configs/properties.mk)

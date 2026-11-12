@@ -4,16 +4,17 @@
 LOCAL_PATH := $(call my-dir)
 ifeq ($(TARGET_DEVICE),dash)
 
-# Build explicitly before image packaging so Ninja observes the updated shared
-# module inputs in the packaging invocation. Kati must not own cache outputs
-# reached through a source-tree symlink.
 .PHONY: kernel
-kernel: PRIVATE_KERNEL_BUILD_SCRIPT := $(LOCAL_PATH)/build-kleaf.sh
-kernel:
-	@echo "Kleaf: dash shared kernel and modules"
-	$(hide) bash $(PRIVATE_KERNEL_BUILD_SCRIPT)
-	$(hide) mkdir -p $(PRODUCT_OUT)
-	$(hide) if ! cmp -s $(TARGET_PREBUILT_KERNEL) $(PRODUCT_OUT)/kernel; then cp -f $(TARGET_PREBUILT_KERNEL) $(PRODUCT_OUT)/kernel; fi
+kernel: $(PRODUCT_OUT)/kernel
+
+# Native module installers export staging rules through installs.mk, not AndroidMk entries.
+# Include their primary files so Make also includes the attached module ZIP contents.
+ALL_DEFAULT_INSTALLED_MODULES += \
+    $(TARGET_VENDOR_RAMDISK_OUT)/lib/modules/modules.load \
+    $(TARGET_OUT_VENDOR_DLKM)/lib/modules/modules.load
+ifeq ($(DASH_SYSTEM_DLKM),true)
+ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_OUT_SYSTEM_DLKM)/lib/modules/modules.load
+endif
 
 .PHONY: dash-strict-kernel
 dash-strict-kernel: PRIVATE_KERNEL_BUILD_SCRIPT := $(LOCAL_PATH)/build-kleaf.sh
@@ -29,9 +30,6 @@ ufs-wlun-bootstrap:
 	$(hide) bash $(PRIVATE_KERNEL_BUILD_SCRIPT) \
 	    --//build/kernel/kleaf:kmi_symbol_list_violations_check=true \
 	    //kernel_device_modules-6.6:ufs_wlun_bootstrap_strict.user
-
-# PA skips kernel compilation rules when a prebuilt Image is selected.
-$(eval $(call copy-one-file,$(TARGET_PREBUILT_KERNEL),$(PRODUCT_OUT)/kernel))
 
 # Platform contains only first-stage inputs; Soong installs kernel modules.
 dash_platform_root := $(DASH_KERNEL_INPUTS)/platform

@@ -1,12 +1,14 @@
 # Copyright (C) 2026 YorokobiMaster
 # SPDX-License-Identifier: Apache-2.0
 
-DASH_KLEAF_OUT := kernel/xiaomi/dash/bazel-bin/kernel_device_modules-6.6
-DASH_WLUN_OUT := $(DASH_KLEAF_OUT)/$(if $(filter true,$(DASH_STRICT_GKI) $(DASH_OFFICIAL_GKI)),ufs_wlun_bootstrap_strict.user,ufs_wlun_bootstrap.user)
-DASH_GKI_CORE_OUT := $(DASH_KLEAF_OUT)/$(if $(filter true,$(DASH_STRICT_GKI)),kernel_strict.user,mgk_64_k66_kernel_aarch64.user)
-ifeq ($(DASH_OFFICIAL_GKI),true)
-DASH_GKI_CORE_OUT := kernel/xiaomi/dash/out/bazel/repositories/dash_official_gki/android15-6.6-2026-10_r3
-endif
+include $(DEVICE_PATH)/kernel/profile.mk
+$(call soong_config_set,kleaf,profile,$(DASH_KERNEL_PROFILE))
+$(call soong_config_set_bool,kleaf,system_dlkm,$(DASH_SYSTEM_DLKM))
+$(foreach partition,vendor_ramdisk vendor_dlkm,$(call soong_config_set,kleaf,$(partition)_modules,$(strip $(file <$(DEVICE_PATH)/kernel/modules.$(partition)))))
+$(call soong_config_set,kleaf,vendor_ramdisk_load,$(strip $(file <$(DEVICE_PATH)/kernel/modules.load.platform)))
+$(call soong_config_set,kleaf,vendor_dlkm_load,$(strip $(file <$(DEVICE_PATH)/kernel/modules.load.vendor_dlkm)))
+$(call soong_config_set,kleaf,system_dlkm_modules,$(strip $(file <$(DEVICE_PATH)/kernel/modules.load.system_dlkm)))
+$(call soong_config_set,kleaf,system_dlkm_load,$(SOONG_CONFIG_kleaf_system_dlkm_modules))
 DASH_KERNEL_INPUTS := vendor/xiaomi/dash/kernel-inputs
 DASH_STOCK_INPUTS := vendor/xiaomi/dash/stock-305
 
@@ -17,8 +19,10 @@ TARGET_NO_KERNEL := false
 TARGET_KERNEL_SOURCE := kernel/xiaomi/dash/kernel-6.6
 TARGET_KERNEL_CONFIG := gki_defconfig
 TARGET_KERNEL_VERSION := 6.6
+# Soong owns the kernel; bypass legacy ROM Make builders.
+TARGET_NO_KERNEL_OVERRIDE := true
 TARGET_FORCE_PREBUILT_KERNEL := true
-TARGET_PREBUILT_KERNEL := $(DASH_GKI_CORE_OUT)/Image.lz4
+TARGET_PREBUILT_KERNEL := $(PRODUCT_OUT)/kernel
 BOARD_KERNEL_IMAGE_NAME := Image.lz4
 
 BOARD_USES_GENERIC_KERNEL_IMAGE := true
@@ -51,9 +55,7 @@ BOARD_USES_VENDOR_DLKMIMAGE := true
 # Kleaf strips distribution modules before signing. Keep GKI signatures.
 BOARD_DO_NOT_STRIP_VENDOR_RAMDISK_MODULES := true
 BOARD_DO_NOT_STRIP_VENDOR_MODULES := true
-include $(DEVICE_PATH)/kernel/modules.mk
-
-ifneq ($(filter true,$(DASH_BUILD_SYSTEM_DLKM) $(DASH_STRICT_GKI) $(DASH_OFFICIAL_GKI)),)
+ifeq ($(DASH_SYSTEM_DLKM),true)
 include $(DEVICE_PATH)/kernel/system-dlkm.mk
 endif
 

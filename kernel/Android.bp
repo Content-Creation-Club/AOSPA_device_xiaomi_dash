@@ -1,0 +1,48 @@
+// Copyright (C) 2026 YorokobiMaster
+// SPDX-License-Identifier: Apache-2.0
+
+soong_namespace {}
+
+prebuilt_lib {
+    name: "kernel_recovery_load",
+    enabled: select(soong_config_variable("kleaf", "profile"), {
+        "normal": true,
+        "strict": true,
+        "official": true,
+        default: false,
+    }),
+    relative_install_path: "modules",
+    vendor_ramdisk: true,
+    install_in_root: true,
+    install_path_skip_first_stage_ramdisk_dir: true,
+    src: ":kernel{.recovery_load}",
+    filename: "modules.load.recovery",
+}
+
+kleaf_kernel {
+    name: "kernel",
+    script: "export-kleaf.py",
+    inputs: [
+        "build-kleaf.sh",
+        "fetch-official-gki.sh",
+        "modules.vendor_ramdisk",
+        "modules.vendor_dlkm",
+        "modules.load.platform",
+        "modules.load.recovery",
+        "modules.load.vendor_dlkm",
+        "modules.load.system_dlkm",
+    ],
+    source_files: [
+        "kernel/xiaomi/dash/device.bazelrc",
+        "kernel/xiaomi/dash/WORKSPACE",
+        "kernel/xiaomi/dash/prebuilts/kernel-build-tools/bazel/linux-x86_64/bazel",
+    ],
+    source_dirs: [
+        "kernel/xiaomi/dash/build",
+        "kernel/xiaomi/dash/kernel-6.6",
+        "kernel/xiaomi/dash/kernel_device_modules-6.6",
+        "kernel/xiaomi/dash/vendor/mediatek/kernel_modules",
+        "kernel/xiaomi/dash/platform/kernel-6.6",
+        "kernel/xiaomi/dash/pgo-profiles",
+    ],
+}
