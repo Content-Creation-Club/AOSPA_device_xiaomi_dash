@@ -110,7 +110,9 @@ PRODUCT_COPY_FILES += \
 
 # Gestures
 PRODUCT_PACKAGES += \
-    vendor.aospa.power-service
+    vendor.aospa.power-service \
+    wake-settings
+PRODUCT_SYSTEM_SERVER_JARS_EXTRA += system_ext:wake-settings
 
 # Google - GMS, Pixel, and Mainline Modules
 $(call inherit-product, vendor/google/gms/config.mk)

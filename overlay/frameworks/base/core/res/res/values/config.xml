@@ -5,6 +5,7 @@
         <item>me.sandai.dashfod.DashFodService</item>
         <item>me.sandai.dashpower.DashPowerService</item>
         <item>me.sandai.dasheyecare.NightLightBridge</item>
+        <item>me.sandai.wake.GestureSettingsService</item>
     </string-array>
 
     <!-- 5G modes supported by the retained MediaTek radio stack -->

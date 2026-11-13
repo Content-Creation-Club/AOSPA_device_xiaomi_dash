@@ -1,0 +1,11 @@
+// Copyright (C) 2026 YorokobiMaster
+// SPDX-License-Identifier: Apache-2.0
+
+java_library {
+    name: "wake-settings",
+    srcs: ["src/**/*.java"],
+    libs: ["services.core"],
+    platform_apis: true,
+    system_ext_specific: true,
+    installable: true,
+}
