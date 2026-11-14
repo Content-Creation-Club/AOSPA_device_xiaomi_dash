@@ -5,6 +5,7 @@
 import argparse
 import os
 from pathlib import Path
+import shutil
 import subprocess
 
 
@@ -89,7 +90,11 @@ def export(workspace, device, out, profile, system_dlkm):
         module_dir = out / "modules" / partition
         module_dir.mkdir(parents=True, exist_ok=True)
         for name, source in modules.items():
-            link(source, module_dir / name)
+            # The native module ZIP preserves symlinks; export module bytes.
+            target = module_dir / name
+            if target.is_symlink():
+                target.unlink()
+            shutil.copyfile(source, target)
     link(core / "Image.lz4", out / "Image.lz4")
     link(config, out / ".config")
     link(outputs / "mgk_64_k66_merged_uapi_headers.user/kernel-uapi-headers.tar.gz",

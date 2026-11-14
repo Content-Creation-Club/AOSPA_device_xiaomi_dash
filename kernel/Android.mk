@@ -31,6 +31,13 @@ ufs-wlun-bootstrap:
 	    --//build/kernel/kleaf:kmi_symbol_list_violations_check=true \
 	    //kernel_device_modules-6.6:ufs_wlun_bootstrap_strict.user
 
+.PHONY: adsp-modules
+adsp-modules: PRIVATE_KERNEL_BUILD_SCRIPT := $(LOCAL_PATH)/build-kleaf.sh
+adsp-modules:
+	$(hide) bash $(PRIVATE_KERNEL_BUILD_SCRIPT) \
+	    //kernel_device_modules-6.6:mgk_64_k66_modules.user/drivers/misc/mediatek/adsp/adsp.ko \
+	    //kernel_device_modules-6.6:mgk_64_k66_modules.user/drivers/misc/mediatek/adsp/v2/adsp-v2.ko
+
 # Platform contains only first-stage inputs; Soong installs kernel modules.
 dash_platform_root := $(DASH_KERNEL_INPUTS)/platform
 dash_platform_files := first_stage_ramdisk/fstab.mt6991
