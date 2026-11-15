@@ -10,7 +10,7 @@ $(call soong_config_set,kleaf,vendor_dlkm_load,$(strip $(file <$(DEVICE_PATH)/ke
 $(call soong_config_set,kleaf,system_dlkm_modules,$(strip $(file <$(DEVICE_PATH)/kernel/modules.load.system_dlkm)))
 $(call soong_config_set,kleaf,system_dlkm_load,$(SOONG_CONFIG_kleaf_system_dlkm_modules))
 DASH_KERNEL_INPUTS := vendor/xiaomi/dash/kernel-inputs
-DASH_STOCK_INPUTS := vendor/xiaomi/dash/stock-305
+DASH_AVB_INPUTS := vendor/xiaomi/dash/avb
 
 # Kleaf owns its retained cache and Bazel symlinks in the shared workspace.
 BUILD_BROKEN_SRC_DIR_RW_ALLOWLIST += $(realpath kernel/xiaomi/dash)
@@ -47,6 +47,7 @@ BOARD_INIT_BOOT_HEADER_VERSION := 4
 BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 
 # Keep the existing recovery in vendor_boot without rebuilding it.
+TARGET_NO_RECOVERY := true
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
 BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 BOARD_VENDOR_RAMDISK_FRAGMENT.recovery.PREBUILT := $(DASH_KERNEL_INPUTS)/recovery.cpio.gz
@@ -60,10 +61,10 @@ include $(DEVICE_PATH)/kernel/system-dlkm.mk
 endif
 
 # Build only the top-level vbmeta from current image descriptors.
-# Vendor stays on stock 305; retain its descriptor without rebuilding it.
+# Retain the vendor descriptor from OS4.0.4.0.XPLCNXM without rebuilding vendor.
 # Keep AVB metadata discovery and disable hashtree verification only.
 BOARD_AVB_ENABLE := true
 BOARD_AVB_KEY_PATH := vendor/lineage-priv/keys/avb.pk8
 BOARD_AVB_ALGORITHM := SHA256_RSA4096
-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 1
-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_descriptors_from_image $(DASH_STOCK_INPUTS)/vbmeta_vendor.img
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --set_hashtree_disabled_flag
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_descriptors_from_image $(DASH_AVB_INPUTS)/vbmeta_vendor.img

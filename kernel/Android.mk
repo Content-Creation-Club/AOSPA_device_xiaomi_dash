@@ -46,10 +46,12 @@ dash_fstab_filter := kernel/xiaomi/dash/kernel_device_modules-6.6/kernel/boot-co
 $(dash_platform_outputs): PRIVATE_FSTAB_FILTER := $(dash_fstab_filter)
 $(dash_platform_outputs): $(dash_platform_root)/first_stage_ramdisk/fstab.mt6991 $(dash_fstab_filter)
 	$(hide) mkdir -p $(dir $@)
-	$(hide) awk -f $(PRIVATE_FSTAB_FILTER) $< > $@
+	$(hide) set -o pipefail; \
+	    awk -f $(PRIVATE_FSTAB_FILTER) $< | \
+	    awk '$$1 == "/dev/block/by-name/vbmeta" { $$5 = "first_stage_mount,nofail,slotselect" } { print }' > $@
 ALL_DEFAULT_INSTALLED_MODULES += $(dash_platform_outputs)
 
 ifdef BUILDING_VBMETA_IMAGE
-$(PRODUCT_OUT)/vbmeta.img: $(DASH_STOCK_INPUTS)/vbmeta_vendor.img
+$(PRODUCT_OUT)/vbmeta.img: $(DASH_AVB_INPUTS)/vbmeta_vendor.img
 endif
 endif
