@@ -67,4 +67,6 @@ BOARD_AVB_ENABLE := true
 BOARD_AVB_KEY_PATH := vendor/lineage-priv/keys/avb.pk8
 BOARD_AVB_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --set_hashtree_disabled_flag
+# LK checks this region property even when image authentication is bypassed.
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --prop com.android.build.init_boot.sku:CN
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_descriptors_from_image $(DASH_AVB_INPUTS)/vbmeta_vendor.img
