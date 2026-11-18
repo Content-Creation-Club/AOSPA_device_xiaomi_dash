@@ -85,6 +85,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 
 PRODUCT_PACKAGES += \
     DashFrameworkResOverlay \
+    PinnerOverlay \
     DashSettingsOverlay \
     DashSettingsProviderOverlay \
     DashPocoGlobalSettingsProviderOverlay \
