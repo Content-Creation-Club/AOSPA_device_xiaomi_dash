@@ -1,11 +1,9 @@
-# dash power framework hooks
-# Source: lineage-23.2 frameworks/base 9063fa3dc34983f17877ef4b91a63350a0c08bc7
-# Base: ce690697d1f6d60ddf2785374432fa812e0c7c7b
-# Exported: 2026-10-02; feature-only patch, with isolated ProGuard rules.
+# dash power and resumed-activity framework hooks
+# Base: adced679019b20628cebd485eeaa46f129da344b
 
 diff --git a/services/core/java/com/android/server/power/DevicePowerManagerInternal.java b/services/core/java/com/android/server/power/DevicePowerManagerInternal.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..fbc8f6ab805fc740f5d5c803a05319dd30f823b4
+index 000000000..fbc8f6ab8
 --- /dev/null
 +++ b/services/core/java/com/android/server/power/DevicePowerManagerInternal.java
 @@ -0,0 +1,21 @@
@@ -31,10 +29,10 @@ index 0000000000000000000000000000000000000000..fbc8f6ab805fc740f5d5c803a05319dd
 +    public abstract void onFling(int displayId, int durationMs);
 +}
 diff --git a/services/core/java/com/android/server/power/PowerManagerService.java b/services/core/java/com/android/server/power/PowerManagerService.java
-index ff600c7d0a2b104bd827c16722330eb6da2d268e..106c4555e8c49ea359f3f629559b8cdb68ec7240 100644
+index 212110b9b..f0061a9e7 100644
 --- a/services/core/java/com/android/server/power/PowerManagerService.java
 +++ b/services/core/java/com/android/server/power/PowerManagerService.java
-@@ -1417,11 +1417,36 @@ public final class PowerManagerService extends SystemService
+@@ -1470,11 +1470,36 @@ public final class PowerManagerService extends SystemService
          publishBinderService(Context.POWER_SERVICE, mBinderService, /* allowIsolated= */ false,
                  DUMP_FLAG_PRIORITY_CRITICAL);
          publishLocalService(PowerManagerInternal.class, mLocalService);
@@ -71,7 +69,7 @@ index ff600c7d0a2b104bd827c16722330eb6da2d268e..106c4555e8c49ea359f3f629559b8cdb
      @Override
      public void onBootPhase(int phase) {
          if (phase == PHASE_SYSTEM_SERVICES_READY) {
-@@ -4427,6 +4452,7 @@ public final class PowerManagerService extends SystemService
+@@ -4687,6 +4712,7 @@ public final class PowerManagerService extends SystemService
                  Slog.d(TAG, "Setting HAL interactive mode to " + enable);
              }
              mHalInteractiveModeEnabled = enable;
@@ -79,7 +77,7 @@ index ff600c7d0a2b104bd827c16722330eb6da2d268e..106c4555e8c49ea359f3f629559b8cdb
              Trace.traceBegin(Trace.TRACE_TAG_POWER, "setHalInteractive(" + enable + ")");
              try {
                  mNativeWrapper.nativeSetPowerMode(Mode.INTERACTIVE, enable);
-@@ -5008,12 +5034,37 @@ public final class PowerManagerService extends SystemService
+@@ -5321,12 +5347,37 @@ public final class PowerManagerService extends SystemService
      }
  
      private boolean setPowerModeInternal(int mode, boolean enabled) {
@@ -122,52 +120,6 @@ index ff600c7d0a2b104bd827c16722330eb6da2d268e..106c4555e8c49ea359f3f629559b8cdb
      }
  
      @VisibleForTesting
-diff --git a/services/core/java/com/android/server/wm/DisplayPolicy.java b/services/core/java/com/android/server/wm/DisplayPolicy.java
-index b05de11ffc61301e1d21fda8c848e6265c0c5244..15a9b5ae45f127b04e1390a65f7b29d432bc0547 100644
---- a/services/core/java/com/android/server/wm/DisplayPolicy.java
-+++ b/services/core/java/com/android/server/wm/DisplayPolicy.java
-@@ -140,6 +140,7 @@ import com.android.internal.util.function.TriFunction;
- import com.android.internal.view.AppearanceRegion;
- import com.android.internal.widget.PointerLocationView;
- import com.android.server.LocalServices;
-+import com.android.server.power.DevicePowerManagerInternal;
- import com.android.server.UiModeManagerInternal;
- import com.android.server.UiThread;
- import com.android.server.notification.NotificationManagerInternal;
-@@ -545,6 +546,11 @@ public class DisplayPolicy {
-                         mService.mPowerManagerInternal.setPowerBoost(
-                                 Boost.INTERACTION, duration);
-                     }
-+                    final DevicePowerManagerInternal devicePower =
-+                            LocalServices.getService(DevicePowerManagerInternal.class);
-+                    if (devicePower != null) {
-+                        devicePower.onFling(mDisplayContent.getDisplayId(), duration);
-+                    }
-                 }
- 
-                 @Override
-diff --git a/services/proguard.flags b/services/proguard.flags
-index b10aa7ef79f126761c2c869430972d56b5c0650e..b4dc4a68216748a1638ab720c2dcea43ed621556 100644
---- a/services/proguard.flags
-+++ b/services/proguard.flags
-@@ -14,6 +14,17 @@
- }
- 
- # APIs referenced by dependent JAR files and modules
-+# Optional device power client is loaded from a separate system-server JAR.
-+-keep class com.android.server.power.DevicePowerManagerInternal { *; }
-+-keep interface com.android.server.power.DevicePowerManagerInternal$Listener { *; }
-+
-+# Activity lifecycle APIs used by DashThermal in a separate system-server JAR.
-+-keep interface com.android.server.wm.ActivityTaskManagerInternal$ResumedActivityListener { *; }
-+-keepclassmembers class com.android.server.wm.ActivityTaskManagerInternal {
-+    public void registerResumedActivityListener(com.android.server.wm.ActivityTaskManagerInternal$ResumedActivityListener);
-+    public void unregisterResumedActivityListener(com.android.server.wm.ActivityTaskManagerInternal$ResumedActivityListener);
-+}
-+
- # TODO(b/300514883): Pull @SystemApi keep rules from system-api.pro.
- # TODO(b/373579455): Evaluate if <init> needs to be kept.
- -keep interface android.annotation.SystemApi {
 diff --git a/services/core/java/com/android/server/wm/ActivityRecord.java b/services/core/java/com/android/server/wm/ActivityRecord.java
 index a536d1916..c7ad687a4 100644
 --- a/services/core/java/com/android/server/wm/ActivityRecord.java
@@ -310,3 +262,48 @@ index 8b2279e9d..afd2d417f 100644
          @Override
          public boolean isCallerRecents(int callingUid) {
              return ActivityTaskManagerService.this.isCallerRecents(callingUid);
+diff --git a/services/core/java/com/android/server/wm/DisplayPolicy.java b/services/core/java/com/android/server/wm/DisplayPolicy.java
+index f5b33a688..3ece50958 100644
+--- a/services/core/java/com/android/server/wm/DisplayPolicy.java
++++ b/services/core/java/com/android/server/wm/DisplayPolicy.java
+@@ -173,6 +173,7 @@ import com.android.internal.util.function.TriFunction;
+ import com.android.internal.view.AppearanceRegion;
+ import com.android.internal.widget.PointerLocationView;
+ import com.android.server.LocalServices;
++import com.android.server.power.DevicePowerManagerInternal;
+ import com.android.server.UiModeManagerInternal;
+ import com.android.server.UiThread;
+ import com.android.server.notification.NotificationManagerInternal;
+@@ -662,6 +663,11 @@ public class DisplayPolicy {
+                         mService.mPowerManagerInternal.setPowerBoost(
+                                 Boost.INTERACTION, duration);
+                     }
++                    final DevicePowerManagerInternal devicePower =
++                            LocalServices.getService(DevicePowerManagerInternal.class);
++                    if (devicePower != null) {
++                        devicePower.onFling(mDisplayContent.getDisplayId(), duration);
++                    }
+                 }
+ 
+                 @Override
+diff --git a/services/proguard.flags b/services/proguard.flags
+--- a/services/proguard.flags
++++ b/services/proguard.flags
+@@ -14,6 +14,17 @@
+ }
+ 
+ # APIs referenced by dependent JAR files and modules
++# Optional device power client is loaded from a separate system-server JAR.
++-keep class com.android.server.power.DevicePowerManagerInternal { *; }
++-keep interface com.android.server.power.DevicePowerManagerInternal$Listener { *; }
++
++# Activity lifecycle APIs used by DashThermal in a separate system-server JAR.
++-keep interface com.android.server.wm.ActivityTaskManagerInternal$ResumedActivityListener { *; }
++-keepclassmembers class com.android.server.wm.ActivityTaskManagerInternal {
++    public void registerResumedActivityListener(com.android.server.wm.ActivityTaskManagerInternal$ResumedActivityListener);
++    public void unregisterResumedActivityListener(com.android.server.wm.ActivityTaskManagerInternal$ResumedActivityListener);
++}
++
+ # TODO(b/300514883): Pull @SystemApi keep rules from system-api.pro.
+ # TODO(b/373579455): Evaluate if <init> needs to be kept.
+ -keep interface android.annotation.SystemApi {
