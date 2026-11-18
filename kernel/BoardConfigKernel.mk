@@ -36,7 +36,7 @@ BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 67108864
 BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2
-# Leave room for the retained OrangeFox fragment in the 64 MiB vendor_boot.
+# Leave room for the retained recovery fragment in the 64 MiB vendor_boot.
 BOARD_RAMDISK_USE_LZ4 := false
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_PREBUILT_DTBIMAGE_DIR := $(DASH_KERNEL_INPUTS)
@@ -46,11 +46,11 @@ BOARD_MKBOOTIMG_ARGS += --dtb_offset 0x87c80000
 BOARD_INIT_BOOT_HEADER_VERSION := 4
 BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 
-# Keep the existing recovery in vendor_boot without rebuilding it.
+# Prebuilt YARP recovery, built 2026-11-18; packaged with the ROM.
 TARGET_NO_RECOVERY := true
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
 BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
-RECOVERY_RAMDISK_SOURCE ?= $(DASH_KERNEL_INPUTS)/recovery.cpio.gz
+RECOVERY_RAMDISK_SOURCE ?= $(DEVICE_PATH)/recovery/ramdisk.cpio.gz
 BOARD_VENDOR_RAMDISK_FRAGMENT.recovery.PREBUILT := $(RECOVERY_RAMDISK_SOURCE)
 TARGET_FS_CONFIG_GEN += $(DEVICE_PATH)/kernel/config.fs
 
