@@ -22,6 +22,14 @@ $(call inherit-product-if-exists, vendor/xiaomi/dash-miuicamera/miuicamera.mk)
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_USE_DYNAMIC_PARTITION_SIZE := true
 
+# Virtual A/B. The retained stock vendor supplies the runtime VABC properties.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/vabc_features.mk)
+
+PRODUCT_PACKAGES += \
+    snapuserd_ramdisk \
+    update_engine \
+    update_verifier
+
 # A performance flagship powered by a nerfed previous-gen MTK flagship SoC.
 PRODUCT_SHIPPING_API_LEVEL := 36
 PRODUCT_TARGET_VNDK_VERSION := 35
