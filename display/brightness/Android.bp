@@ -4,7 +4,7 @@ java_library {
     name: "dash-brightness",
     srcs: ["src/**/*.java"],
     libs: ["services.core"],
-    static_libs: ["vendor.xiaomi.hardware.displayfeature_aidl-V2-java"],
+    static_libs: ["//hardware/xiaomi/dash:vendor.xiaomi.hardware.displayfeature_aidl-V2-java"],
     platform_apis: true,
     system_ext_specific: true,
     installable: true,

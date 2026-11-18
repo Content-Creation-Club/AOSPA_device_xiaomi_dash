@@ -11,8 +11,8 @@ $(call inherit-product, $(DASH_HARDWARE_PATH)/dash.mk)
 # Device features
 $(call inherit-product, $(DEVICE_PATH)/fod/fod.mk)
 $(call inherit-product, $(DEVICE_PATH)/display/brightness/brightness.mk)
-$(call inherit-product, $(DEVICE_PATH)/power/power.mk)
-$(call inherit-product, $(DEVICE_PATH)/ims/ims.mk)
+$(call inherit-product, $(DASH_HARDWARE_PATH)/power/power.mk)
+$(call inherit-product, $(DASH_HARDWARE_PATH)/ims/ims.mk)
 $(call inherit-product, $(DEVICE_PATH)/esim/esim.mk)
 
 # Product additions
@@ -46,7 +46,6 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
     $(DEVICE_PATH)/framework_compatibility_matrix.xml
 
 PRODUCT_SOONG_NAMESPACES += \
-    $(DEVICE_PATH) \
     $(DEVICE_PATH)/kernel \
     vendor/xiaomi/dash
 

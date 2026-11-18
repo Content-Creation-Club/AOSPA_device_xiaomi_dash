@@ -1,0 +1,10 @@
+# Copyright (C) 2026 YorokobiMaster
+# SPDX-License-Identifier: Apache-2.0
+
+# Retained 305 thermal_core is disabled. DashThermal supplies only the legacy
+# socket read/notify trigger; the vendor HAL still reads sensors and grades them.
+# Permit this specific legacy endpoint across Treble's socket boundary.
+# The implementation type and its socket exception belong to vendor policy.
+unix_socket_connect(system_server, thermal_hal, hal_thermal_server)
+
+allow init sysfs_dash_gpt:file setattr;

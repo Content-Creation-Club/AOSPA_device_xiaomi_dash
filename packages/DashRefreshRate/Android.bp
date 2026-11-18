@@ -8,7 +8,7 @@ package {
 android_app {
     name: "DashRefreshRate",
     srcs: ["src/**/*.java"],
-    static_libs: ["vendor.xiaomi.hardware.displayfeature_aidl-V2-java"],
+    static_libs: ["//hardware/xiaomi/dash:vendor.xiaomi.hardware.displayfeature_aidl-V2-java"],
     platform_apis: true,
     certificate: "platform",
     privileged: true,
