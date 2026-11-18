@@ -39,7 +39,8 @@ BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2
 # Leave room for the retained recovery fragment in the 64 MiB vendor_boot.
 BOARD_RAMDISK_USE_LZ4 := false
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
-BOARD_PREBUILT_DTBIMAGE_DIR := $(DASH_KERNEL_INPUTS)
+# Stock OS4.0.4.0.XPLCNXM device tree.
+BOARD_PREBUILT_DTBIMAGE_DIR := $(DEVICE_PATH)/kernel/dtb
 BOARD_MKBOOTIMG_ARGS += --header_version 4 --kernel_offset 0x80000000
 BOARD_MKBOOTIMG_ARGS += --ramdisk_offset 0xa6f00000 --tags_offset 0x87c80000
 BOARD_MKBOOTIMG_ARGS += --dtb_offset 0x87c80000
