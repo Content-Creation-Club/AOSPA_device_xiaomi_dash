@@ -3,6 +3,26 @@
 
 soong_namespace {}
 
+cc_binary {
+    name: "usb_offload_options",
+    srcs: ["usb_offload_options.c"],
+    vendor_ramdisk_available: true,
+    static_executable: true,
+    stl: "none",
+    compile_multilib: "64",
+    cflags: ["-Wall", "-Wextra", "-Werror"],
+}
+
+prebuilt_lib {
+    name: "kernel_usb_options",
+    relative_install_path: "modules",
+    vendor_ramdisk: true,
+    install_in_root: true,
+    install_path_skip_first_stage_ramdisk_dir: true,
+    src: "modules.options",
+    filename: "modules.options",
+}
+
 prebuilt_lib {
     name: "kernel_recovery_load",
     enabled: select(soong_config_variable("kleaf", "profile"), {

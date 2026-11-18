@@ -11,6 +11,7 @@ kernel: $(PRODUCT_OUT)/kernel
 # Include their primary files so Make also includes the attached module ZIP contents.
 ALL_DEFAULT_INSTALLED_MODULES += \
     $(TARGET_VENDOR_RAMDISK_OUT)/lib/modules/modules.load \
+    $(TARGET_VENDOR_RAMDISK_OUT)/first_stage_ramdisk/system/bin/usb_offload_options \
     $(TARGET_OUT_VENDOR_DLKM)/lib/modules/modules.load
 ifeq ($(DASH_SYSTEM_DLKM),true)
 ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_OUT_SYSTEM_DLKM)/lib/modules/modules.load
@@ -42,6 +43,9 @@ $(dash_platform_outputs): $(dash_platform_root)/first_stage_ramdisk/fstab.mt6991
 	    awk -f $(PRIVATE_FSTAB_FILTER) $< | \
 	    awk '$$1 == "/dev/block/by-name/vbmeta" { $$5 = "first_stage_mount,nofail,slotselect" } { print }' > $@
 ALL_DEFAULT_INSTALLED_MODULES += $(dash_platform_outputs)
+
+# mkbootfs reads device file modes from the generated system fs_config table.
+$(call intermediates-dir-for,PACKAGING,vendor_boot)/vendor_ramdisk.cpio.gz: $(TARGET_OUT)/etc/fs_config_files
 
 ifdef BUILDING_VBMETA_IMAGE
 $(PRODUCT_OUT)/vbmeta.img: $(DASH_AVB_INPUTS)/vbmeta_vendor.img

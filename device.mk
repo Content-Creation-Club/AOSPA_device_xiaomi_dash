@@ -52,6 +52,8 @@ PRODUCT_SOONG_NAMESPACES += \
 PRODUCT_PACKAGES += \
     kernel \
     kernel_recovery_load \
+    kernel_usb_options \
+    usb_offload_options.vendor_ramdisk \
     kernel_modules_vendor_ramdisk \
     kernel_modules_vendor_dlkm
 ifeq ($(DASH_SYSTEM_DLKM),true)
