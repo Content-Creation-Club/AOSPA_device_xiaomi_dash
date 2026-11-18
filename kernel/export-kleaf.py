@@ -11,15 +11,16 @@ import subprocess
 
 def profile_paths(workspace, profile):
     outputs = workspace / "bazel-bin/kernel_device_modules-6.6"
-    strict = profile != "normal"
-    core_target = "kernel_strict.user" if strict else "mgk_64_k66_kernel_aarch64.user"
-    bootstrap_target = "ufs_wlun_bootstrap_strict.user" if strict else "ufs_wlun_bootstrap.user"
-    core = outputs / core_target
-    config = outputs / (core_target + "_config/out_dir/.config")
+    core_target = "//kernel-6.6:kernel_aarch64"
+    bootstrap_target = "//kernel_device_modules-6.6:ufs_wlun_bootstrap"
+    core_path = core_target.removeprefix("//").replace(":", "/")
+    bootstrap_path = bootstrap_target.removeprefix("//").replace(":", "/")
+    core = workspace / "bazel-bin" / core_path
+    config = workspace / "bazel-bin" / (core_path + "_config/out_dir/.config")
     if profile == "official":
         core = workspace / "out/bazel/repositories/dash_official_gki/android15-6.6-2026-10_r3"
         config = core / ".config"
-    return outputs, core, config, outputs / bootstrap_target, core_target, bootstrap_target
+    return outputs, core, config, workspace / "bazel-bin" / bootstrap_path, core_target, bootstrap_target
 
 
 def read_list(path):
@@ -44,6 +45,11 @@ def write_text(path, text):
 
 def export(workspace, device, out, profile, system_dlkm):
     outputs, core, config, bootstrap, _, _ = profile_paths(workspace, profile)
+    constants = (workspace / "kernel-6.6/build.config.constants").read_text().splitlines()
+    clang_version = next(line.split("=", 1)[1] for line in constants
+                         if line.startswith("CLANG_VERSION="))
+    strip = workspace / "prebuilts/clang/host/linux-x86" / f"clang-{clang_version}" / "bin/llvm-strip"
+    vendor_sources = set()
     partitions = {}
     installed = {}
     for partition, load_name in [("vendor_ramdisk", "platform"), ("vendor_dlkm", "vendor_dlkm")]:
@@ -58,6 +64,8 @@ def export(workspace, device, out, profile, system_dlkm):
                 source = outputs / path
             name = source.name
             source = source.resolve(strict=True)
+            if not path.startswith("@core/"):
+                vendor_sources.add(source)
             if name in modules and modules[name] != source:
                 raise ValueError(f"conflicting module sources for {name}")
             modules[name] = source
@@ -74,7 +82,7 @@ def export(workspace, device, out, profile, system_dlkm):
         load = read_list(device / "modules.load.system_dlkm")
         for name in load:
             # Official GKI omits TLS; use this build's audited vendor-KMI module.
-            source = outputs / "kernel_strict.user/tls.ko" if profile == "official" and name == "tls.ko" else core / name
+            source = workspace / "bazel-bin/kernel-6.6/kernel_aarch64/tls.ko" if profile == "official" and name == "tls.ko" else core / name
             source = source.resolve(strict=True)
             if name in modules and modules[name] != source:
                 raise ValueError(f"conflicting module sources for {name}")
@@ -94,7 +102,12 @@ def export(workspace, device, out, profile, system_dlkm):
             target = module_dir / name
             if target.is_symlink():
                 target.unlink()
-            shutil.copyfile(source, target)
+            if source in vendor_sources:
+                # Match native vendor distribution; preserve signed GKI module bytes.
+                subprocess.run([str(strip), "--strip-debug", "-o", str(target), str(source)],
+                               check=True)
+            else:
+                shutil.copyfile(source, target)
     link(core / "Image.lz4", out / "Image.lz4")
     link(config, out / ".config")
     link(outputs / "mgk_64_k66_merged_uapi_headers.user/kernel-uapi-headers.tar.gz",
@@ -104,26 +117,23 @@ def export(workspace, device, out, profile, system_dlkm):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", choices=["normal", "strict", "official"], required=True)
+    parser.add_argument("--profile", choices=["normal", "official"], required=True)
     parser.add_argument("--system-dlkm", choices=["true", "false"], required=True)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     device = Path(__file__).resolve().parent
     workspace = Path("kernel/xiaomi/dash").resolve(strict=True)
     _, _, _, _, core_target, bootstrap_target = profile_paths(workspace, args.profile)
-    common_targets = ["mgk_64_k66_customer_modules_install.user", "mgk_64_k66_merged_uapi_headers.user"]
+    common_targets = ["//kernel_device_modules-6.6:mgk_64_k66_customer_modules_install.user", "//kernel_device_modules-6.6:mgk_64_k66_merged_uapi_headers.user"]
 
     def build(targets, check):
         subprocess.run(["bash", str(device / "build-kleaf.sh"),
                         "--//build/kernel/kleaf:kmi_symbol_list_violations_check=" + check,
-                        *("//kernel_device_modules-6.6:" + target for target in targets)], check=True)
+                        *targets], check=True)
 
-    if args.profile == "normal":
-        build([core_target, *common_targets, bootstrap_target], "false")
-    else:
-        # MTK modules retain their native build; enforce GKI checks on the selected core.
-        build(common_targets, "false")
-        build([core_target, bootstrap_target], "true")
+    # MTK modules retain their native build; enforce GKI checks on the selected core.
+    build(common_targets, "false")
+    build([core_target, bootstrap_target], "true")
     if args.profile == "official":
         subprocess.run(["bash", str(device / "fetch-official-gki.sh")], check=True)
     export(workspace, device, args.out, args.profile, args.system_dlkm == "true")

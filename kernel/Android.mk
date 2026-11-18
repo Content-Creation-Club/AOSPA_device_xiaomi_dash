@@ -16,20 +16,12 @@ ifeq ($(DASH_SYSTEM_DLKM),true)
 ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_OUT_SYSTEM_DLKM)/lib/modules/modules.load
 endif
 
-.PHONY: dash-strict-kernel
-dash-strict-kernel: PRIVATE_KERNEL_BUILD_SCRIPT := $(LOCAL_PATH)/build-kleaf.sh
-dash-strict-kernel:
-	$(hide) bash $(PRIVATE_KERNEL_BUILD_SCRIPT) \
-	    --//build/kernel/kleaf:kmi_symbol_list_violations_check=true \
-	    //kernel_device_modules-6.6:kernel_strict.user \
-	    //kernel_device_modules-6.6:ufs_wlun_bootstrap_strict.user
-
 .PHONY: ufs-wlun-bootstrap
 ufs-wlun-bootstrap: PRIVATE_KERNEL_BUILD_SCRIPT := $(LOCAL_PATH)/build-kleaf.sh
 ufs-wlun-bootstrap:
 	$(hide) bash $(PRIVATE_KERNEL_BUILD_SCRIPT) \
 	    --//build/kernel/kleaf:kmi_symbol_list_violations_check=true \
-	    //kernel_device_modules-6.6:ufs_wlun_bootstrap_strict.user
+	    //kernel_device_modules-6.6:ufs_wlun_bootstrap
 
 .PHONY: adsp-modules
 adsp-modules: PRIVATE_KERNEL_BUILD_SCRIPT := $(LOCAL_PATH)/build-kleaf.sh

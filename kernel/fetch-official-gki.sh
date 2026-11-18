@@ -45,7 +45,7 @@ fi
 # Official GKI does not build TLS. Keep the explicitly audited local module;
 # its signature is not trusted by the official core, so it must obey vendor KMI.
 if [[ ! -s "$cache/tls.ko" ]]; then
-    cp "$workspace/bazel-bin/kernel_device_modules-6.6/kernel_strict.user/tls.ko" "$cache/tls.ko"
+    cp "$workspace/bazel-bin/kernel-6.6/kernel_aarch64/tls.ko" "$cache/tls.ko"
 fi
 
 printf 'Official GKI inputs: %s (CI %s)\n' "$cache" "$build"

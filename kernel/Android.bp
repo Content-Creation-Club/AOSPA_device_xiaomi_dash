@@ -7,7 +7,6 @@ prebuilt_lib {
     name: "kernel_recovery_load",
     enabled: select(soong_config_variable("kleaf", "profile"), {
         "normal": true,
-        "strict": true,
         "official": true,
         default: false,
     }),
@@ -43,6 +42,5 @@ kleaf_kernel {
         "kernel/xiaomi/dash/kernel_device_modules-6.6",
         "kernel/xiaomi/dash/vendor/mediatek/kernel_modules",
         "kernel/xiaomi/dash/platform/kernel-6.6",
-        "kernel/xiaomi/dash/pgo-profiles",
     ],
 }

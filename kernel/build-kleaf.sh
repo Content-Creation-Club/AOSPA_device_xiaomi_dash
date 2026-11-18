@@ -4,14 +4,6 @@
 
 set -euo pipefail
 
-if [[ $# -eq 0 ]]; then
-    set -- \
-        //kernel_device_modules-6.6:mgk_64_k66_kernel_aarch64.user \
-        //kernel_device_modules-6.6:mgk_64_k66_customer_modules_install.user \
-        //kernel_device_modules-6.6:mgk_64_k66_merged_uapi_headers.user \
-        //kernel_device_modules-6.6:ufs_wlun_bootstrap.user
-fi
-
 workspace=$(readlink -f kernel/xiaomi/dash)
 startup_options=()
 if [[ -L "$workspace/bazel-bin" ]]; then
@@ -33,7 +25,7 @@ export PROJECT=mgk_64_k66 MODE=user DEFCONFIG_OVERLAYS=dash.config
 export KERNEL_VERSION=kernel-6.6
 export KLEAF_USE_KLEAF_LOCALVERSION=true
 export KLEAF_EXTRA_GIT_PROJECTS=kernel-6.6:kernel_device_modules-6.6
-exec prebuilts/kernel-build-tools/bazel/linux-x86_64/bazel \
+bazel=(prebuilts/kernel-build-tools/bazel/linux-x86_64/bazel \
     "${startup_options[@]}" \
     --bazelrc=build/kernel/kleaf/common.bazelrc \
     --bazelrc=build/kernel/kleaf/bazelrc/stamp.bazelrc \
@@ -42,5 +34,15 @@ exec prebuilts/kernel-build-tools/bazel/linux-x86_64/bazel \
     --workspace_status_command=build/kernel/kleaf/workspace_status.sh \
     --jobs="${JOBS:-8}" \
     --//build/kernel/kleaf:kmi_symbol_list_violations_check=false \
-    --//build/bazel_mgk_rules:kernel_version=6.6 \
-    "$@"
+    --//build/bazel_mgk_rules:kernel_version=6.6)
+
+if [[ $# -eq 0 ]]; then
+    "${bazel[@]}" \
+        //kernel_device_modules-6.6:mgk_64_k66_customer_modules_install.user \
+        //kernel_device_modules-6.6:mgk_64_k66_merged_uapi_headers.user
+    set -- \
+        --//build/kernel/kleaf:kmi_symbol_list_violations_check=true \
+        //kernel-6.6:kernel_aarch64 \
+        //kernel_device_modules-6.6:ufs_wlun_bootstrap
+fi
+exec "${bazel[@]}" "$@"
