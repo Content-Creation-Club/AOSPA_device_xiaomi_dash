@@ -1,7 +1,9 @@
 # Paranoid Sense Android 17 provider integration
 # Source: Lineage dash frameworks/base 1b566de54c2d8ce8ab2a94669568448cfa69b164
 # Provider port: PixelOS android_frameworks_base c70de90e3089f22ba77e0e7631388a9c0b186ffe
-# PA calcite: services/core/Android.bp context adapted; provider source unchanged.
+# PA calcite: services/core/Android.bp context adapted.
+# Local fixes: upstream per-user binding and success-only authentication haptics.
+# Binding reference: AOSPA beryl a035920506eec32bfe92ce79a1912468c0d23439.
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
 --- a/services/core/Android.bp
@@ -352,10 +354,10 @@ index 000000000000..90dc55a7ed50
 +}
 diff --git a/services/core/java/com/android/server/biometrics/sensors/face/sense/FaceAuthenticationClient.java b/services/core/java/com/android/server/biometrics/sensors/face/sense/FaceAuthenticationClient.java
 new file mode 100644
-index 000000000000..da0a71f083f8
+index 0000000..032babb
 --- /dev/null
 +++ b/services/core/java/com/android/server/biometrics/sensors/face/sense/FaceAuthenticationClient.java
-@@ -0,0 +1,239 @@
+@@ -0,0 +1,241 @@
 +/*
 + * Copyright (C) 2020 The Android Open Source Project
 + * Copyright (C) 2023 Paranoid Android
@@ -536,7 +538,9 @@ index 000000000000..da0a71f083f8
 +    public void onAuthenticated(BiometricAuthenticator.Identifier identifier,
 +            boolean authenticated, ArrayList<Byte> token) {
 +        super.onAuthenticated(identifier, authenticated, token);
-+        vibrateSuccess();
++        if (authenticated) {
++            vibrateSuccess();
++        }
 +
 +        mState = STATE_STOPPED;
 +        mUsageStats.addEvent(new UsageStats.AuthenticationEvent(
@@ -1522,10 +1526,10 @@ index 000000000000..78e291e2e66e
 +}
 diff --git a/services/core/java/com/android/server/biometrics/sensors/face/sense/SenseProvider.java b/services/core/java/com/android/server/biometrics/sensors/face/sense/SenseProvider.java
 new file mode 100644
-index 000000000000..165b28744bfe
+index 0000000..14826e2
 --- /dev/null
 +++ b/services/core/java/com/android/server/biometrics/sensors/face/sense/SenseProvider.java
-@@ -0,0 +1,1156 @@
+@@ -0,0 +1,1153 @@
 +/*
 + * Copyright (C) 2020 The Android Open Source Project
 + * Copyright (C) 2023 Paranoid Android
@@ -1568,7 +1572,6 @@ index 000000000000..165b28744bfe
 +import android.hardware.face.FaceEnrollOptions;
 +import android.hardware.face.FaceSensorPropertiesInternal;
 +import android.hardware.face.IFaceServiceReceiver;
-+import android.net.Uri;
 +import android.os.Binder;
 +import android.os.Handler;
 +import android.os.IBinder;
@@ -2638,10 +2641,8 @@ index 000000000000..165b28744bfe
 +                try {
 +                    Intent intent = new Intent(BIND_SENSE_ACTION);
 +                    intent.setClassName(PACKAGE_NAME, SERVICE_NAME);
-+                    intent.setData(Uri.parse("sense://user/" + userId));
-+                    intent.putExtra(Intent.EXTRA_USER_ID, userId);
 +                    boolean result = mContext.bindServiceAsUser(intent,
-+                            new SenseServiceConnection(userId), 1, UserHandle.SYSTEM);
++                            new SenseServiceConnection(userId), 1, UserHandle.of(userId));
 +                    if (result) {
 +                        mIsBinding = true;
 +                    }
