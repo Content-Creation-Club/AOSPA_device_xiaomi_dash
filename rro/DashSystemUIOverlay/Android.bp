@@ -5,4 +5,6 @@ runtime_resource_overlay {
     name: "DashSystemUIOverlay",
     certificate: "platform",
     product_specific: true,
+    resource_libs: ["ParanoidSystemUI"],
+    aaptflags: ["--package-id", "0x7e", "--allow-reserved-package-id"],
 }

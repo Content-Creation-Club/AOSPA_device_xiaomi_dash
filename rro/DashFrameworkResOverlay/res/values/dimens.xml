@@ -5,8 +5,8 @@
 -->
 <resources>
     <!-- Product RRO overrides the retained vendor status bar dimensions.
-         152px clears the camera hole (physical bottom edge ~130px). -->
-    <dimen name="status_bar_height_default">152px</dimen>
+         The 152px portrait cutout raises the actual bar above the 28dp baseline. -->
+    <dimen name="status_bar_height_default">28dp</dimen>
     <dimen name="status_bar_height_portrait">152px</dimen>
-    <dimen name="status_bar_height_landscape">28dp</dimen>
+    <dimen name="status_bar_height_landscape">40dp</dimen>
 </resources>
