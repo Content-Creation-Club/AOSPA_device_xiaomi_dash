@@ -44,6 +44,7 @@ mgk_64_k66_customer_modules_install.user/cpudvfs.ko
 mgk_64_k66_customer_modules_install.user/cpufreq_sugov_ext.ko
 mgk_64_k66_customer_modules_install.user/cpuqos_ext.ko
 mgk_64_k66_customer_modules_install.user/cpuqos_v3.ko
+mgk_64_k66_customer_modules_install.user/dio_dma_mapper.ko
 mgk_64_k66_customer_modules_install.user/dw9781c.ko
 mgk_64_k66_customer_modules_install.user/dw9781d.ko
 mgk_64_k66_customer_modules_install.user/eas_ext.ko

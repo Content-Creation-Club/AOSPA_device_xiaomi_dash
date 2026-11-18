@@ -180,6 +180,7 @@ mtk_smmu_qos.ko
 cmdq-sec-drv.ko
 mtk_ccuv.ko
 camera_dpe_isp8.ko
+dio_dma_mapper.ko
 wla-v1.ko
 wla-v1-dbg.ko
 mtk-lpm.ko
