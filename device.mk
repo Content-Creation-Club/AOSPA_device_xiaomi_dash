@@ -2,11 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 DEVICE_PATH := device/xiaomi/dash
-include $(DEVICE_PATH)/kernel/profile.mk
 
 # Shared hardware implementation.
 DASH_HARDWARE_PATH ?= hardware/xiaomi/dash
 $(call inherit-product, $(DASH_HARDWARE_PATH)/dash.mk)
+$(call inherit-product, $(DASH_HARDWARE_PATH)/kernel/device.mk)
+$(call inherit-product, $(DASH_HARDWARE_PATH)/boot/device.mk)
 
 # Device features
 $(call inherit-product, $(DEVICE_PATH)/fod/fod.mk)
@@ -34,39 +35,19 @@ PRODUCT_PACKAGES += \
 PRODUCT_SHIPPING_API_LEVEL := 36
 PRODUCT_TARGET_VNDK_VERSION := 35
 
-# What to build.
-PRODUCT_BUILD_BOOT_IMAGE := true
-PRODUCT_BUILD_VENDOR_BOOT_IMAGE := true
-PRODUCT_BUILD_VENDOR_DLKM_IMAGE := true
-PRODUCT_BUILD_VBMETA_IMAGE := true
-
-# No need to.
+# Retain the stock vendor-side images.
 PRODUCT_BUILD_DTBO_IMAGE := false
 PRODUCT_BUILD_DEBUG_BOOT_IMAGE := false
 PRODUCT_BUILD_DEBUG_VENDOR_BOOT_IMAGE := false
 PRODUCT_BUILD_ODM_IMAGE := false
 PRODUCT_BUILD_ODM_DLKM_IMAGE := false
 PRODUCT_BUILD_VENDOR_IMAGE := false
-PRODUCT_BUILD_RECOVERY_IMAGE := false
-PRODUCT_BUILD_SYSTEM_DLKM_IMAGE := $(DASH_SYSTEM_DLKM)
 
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
     $(DEVICE_PATH)/framework_compatibility_matrix.xml
 
 PRODUCT_SOONG_NAMESPACES += \
-    $(DEVICE_PATH)/kernel \
     vendor/xiaomi/dash
-
-PRODUCT_PACKAGES += \
-    kernel \
-    kernel_recovery_load \
-    kernel_usb_options \
-    usb_offload_options.vendor_ramdisk \
-    kernel_modules_vendor_ramdisk \
-    kernel_modules_vendor_dlkm
-ifeq ($(DASH_SYSTEM_DLKM),true)
-PRODUCT_PACKAGES += kernel_modules_system_dlkm
-endif
 
 # Properties
 $(call inherit-product, $(DEVICE_PATH)/configs/properties.mk)
