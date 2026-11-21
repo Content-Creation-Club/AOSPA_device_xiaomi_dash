@@ -36,7 +36,7 @@ The Redmi Turbo 5 Max is ~~a performance flagship powered by a nerfed previous-g
 
 ## Build dependencies
 
-- [Kernel](https://github.com/Content-Creation-Club/android_kernel_xiaomi_dash)
+- [Kernel](https://github.com/Content-Creation-Club/android_kernel_device_modules_xiaomi_dash) — PA expects the synced `kernel/platform/kernel-6.6` workspace at `kernel/xiaomi/dash`.
 - [Hardware](https://github.com/YorokobiMaster/android_hardware_xiaomi_dash/)
 
 ## Credits

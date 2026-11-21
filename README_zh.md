@@ -36,7 +36,7 @@ Redmi Turbo 5 Max 是一款~~拿上一代联发科旗舰芯片阉割出来的性
 
 ## 构建依赖
 
-- [内核](https://github.com/Content-Creation-Club/android_kernel_xiaomi_dash)
+- [内核](https://github.com/Content-Creation-Club/android_kernel_device_modules_xiaomi_dash) — PA 从 `kernel/xiaomi/dash` 使用这份清单同步出的 `kernel/platform/kernel-6.6` 工作区。
 - [硬件适配](https://github.com/YorokobiMaster/android_hardware_xiaomi_dash/)
 
 ## 致谢
