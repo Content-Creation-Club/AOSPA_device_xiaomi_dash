@@ -38,6 +38,7 @@ The Redmi Turbo 5 Max is ~~a performance flagship powered by a nerfed previous-g
 
 - [Kernel](https://github.com/Content-Creation-Club/android_kernel_device_modules_xiaomi_dash) — PA expects the synced `kernel/platform/kernel-6.6` workspace at `kernel/xiaomi/dash`.
 - [Hardware](https://github.com/YorokobiMaster/android_hardware_xiaomi_dash/)
+- eSIM profile management requires [OpenEUICC](https://gitea.angry.im/PeterCxy/OpenEUICC/src/commit/cad687c50eb2c74adae8bfbc67265efc43f467a7) and [its prebuilts](https://gitea.angry.im/PeterCxy/android_prebuilts_openeuicc-deps/src/commit/540216793010cabc49782bd01844cd8dd28a4c7c). Until a manifest is provided, sync them manually to `packages/apps/OpenEUICC` (including submodules) and `prebuilts/openeuicc-deps`, respectively.
 
 ## Credits
 

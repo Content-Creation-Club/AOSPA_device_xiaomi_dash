@@ -38,6 +38,7 @@ Redmi Turbo 5 Max 是一款~~拿上一代联发科旗舰芯片阉割出来的性
 
 - [内核](https://github.com/Content-Creation-Club/android_kernel_device_modules_xiaomi_dash) — PA 从 `kernel/xiaomi/dash` 使用这份清单同步出的 `kernel/platform/kernel-6.6` 工作区。
 - [硬件适配](https://github.com/YorokobiMaster/android_hardware_xiaomi_dash/)
+- eSIM 配置管理需要 [OpenEUICC](https://gitea.angry.im/PeterCxy/OpenEUICC/src/commit/cad687c50eb2c74adae8bfbc67265efc43f467a7) 和[配套预编译依赖](https://gitea.angry.im/PeterCxy/android_prebuilts_openeuicc-deps/src/commit/540216793010cabc49782bd01844cd8dd28a4c7c)。清单补齐前，请分别手动同步到 `packages/apps/OpenEUICC`（含子模块）和 `prebuilts/openeuicc-deps`。
 
 ## 致谢
 

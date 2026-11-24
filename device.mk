@@ -18,7 +18,10 @@ $(call inherit-product, $(DEVICE_PATH)/fod/fod.mk)
 $(call inherit-product, $(DEVICE_PATH)/display/brightness/brightness.mk)
 $(call inherit-product, $(DASH_HARDWARE_PATH)/power/power.mk)
 $(call inherit-product, $(DASH_HARDWARE_PATH)/ims/ims.mk)
-$(call inherit-product, $(DEVICE_PATH)/esim/esim.mk)
+$(call inherit-product, $(DASH_HARDWARE_PATH)/esim/esim.mk)
+
+# PA's eSIM profile assistant.
+PRODUCT_PACKAGES += OpenEUICC
 
 # Product additions
 $(call inherit-product-if-exists, vendor/xiaomi/dash-miuicamera/miuicamera.mk)
