@@ -28,13 +28,5 @@ allow dash_health sysfs_battery_supply:file { getattr open read write };
 allow dash_health sysfs_batteryinfo:dir search;
 allow dash_health sysfs_battery_supply:dir search;
 
-# Retained vendor type for thermal_message/charger_temp.
-type sysfs_therm;
-allow dash_health sysfs_therm:dir search;
-allow dash_health sysfs_therm:file { getattr open read write };
-allow dash_health sysfs_usb_supply:dir search;
-allow dash_health sysfs_usb_supply:file { getattr open read };
-allow dash_health self:netlink_kobject_uevent_socket create_socket_perms_no_ioctl;
-
 allow dash_health dash_health_data_file:dir rw_dir_perms;
 allow dash_health dash_health_data_file:file create_file_perms;

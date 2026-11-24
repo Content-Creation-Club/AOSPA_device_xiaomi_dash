@@ -1,0 +1,28 @@
+# Copyright (C) 2026 YorokobiMaster
+# SPDX-License-Identifier: Apache-2.0
+
+type dash_fast_charge, coredomain, domain;
+type dash_fast_charge_exec, system_file_type, exec_type, file_type;
+type dash_fast_charge_data_file, file_type, data_file_type, core_data_file_type;
+
+init_daemon_domain(dash_fast_charge)
+hal_server_domain(dash_fast_charge, hal_lineage_health)
+binder_call(dash_fast_charge, servicemanager)
+
+# Keep the stock labels on the SIC and USB nodes.
+type sysfs_therm;
+allow dash_fast_charge sysfs_therm:dir search;
+allow dash_fast_charge sysfs_therm:file { getattr open read write };
+allow dash_fast_charge sysfs_batteryinfo:dir search;
+allow dash_fast_charge sysfs_usb_supply:dir search;
+allow dash_fast_charge sysfs_usb_supply:file { getattr open read };
+allow dash_fast_charge self:netlink_kobject_uevent_socket create_socket_perms_no_ioctl;
+
+# Save beside the existing limit file without granting access to it.
+# rename() keeps the label assigned when the temporary file was created.
+type_transition dash_fast_charge dash_health_data_file:file dash_fast_charge_data_file "fast-charge.tmp";
+allow dash_fast_charge dash_health_data_file:dir { search open read getattr write add_name remove_name };
+allow dash_fast_charge dash_fast_charge_data_file:file create_file_perms;
+
+# F2FS probes reserved blocks while saving; normal writes need no capability.
+dontaudit dash_fast_charge self:global_capability_class_set sys_resource;

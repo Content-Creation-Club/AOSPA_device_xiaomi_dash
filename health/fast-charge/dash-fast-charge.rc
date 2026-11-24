@@ -1,0 +1,7 @@
+# Copyright (C) 2026 YorokobiMaster
+# SPDX-License-Identifier: Apache-2.0
+
+service dash-fast-charge /system_ext/bin/hw/dash-fast-charge
+    class hal
+    user system
+    group system
