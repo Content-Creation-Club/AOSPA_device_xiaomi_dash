@@ -46,6 +46,27 @@ BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := erofs
 
 BOARD_USES_METADATA_PARTITION := true
 
+# Partial OTA includes the ROM images and the stock boot logo.
+AB_OTA_PARTITIONS += \
+    boot \
+    init_boot \
+    logo \
+    product \
+    system \
+    system_dlkm \
+    system_ext \
+    vbmeta \
+    vendor_boot \
+    vendor_dlkm
+BOARD_PARTIAL_OTA_UPDATE_PARTITIONS_LIST := $(AB_OTA_PARTITIONS)
+BOARD_PACK_RADIOIMAGES += logo
+
+# Match the stock OS4 main group without generating a replacement super image.
+BOARD_SUPER_PARTITION_METADATA_DEVICE := super
+BOARD_SUPER_PARTITION_GROUPS := main
+BOARD_MAIN_SIZE := 12874416128
+BOARD_MAIN_PARTITION_LIST := product system system_dlkm system_ext vendor_dlkm
+
 TARGET_USERIMAGES_USE_F2FS := true
 
 # Choose a preferred file system.
