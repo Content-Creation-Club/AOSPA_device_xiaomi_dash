@@ -55,6 +55,8 @@ BOARD_ODM_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
 
 # I don't modify /vendor.
 TARGET_USES_PREBUILT_VENDOR_SEPOLICY := true
+# PA's replacement-vendor policy is not shipped with the retained stock vendor.
+BOARD_VENDOR_SEPOLICY_DIRS := $(filter-out vendor/aospa/sepolicy/vendor,$(BOARD_VENDOR_SEPOLICY_DIRS))
 
 include $(DASH_HARDWARE_PATH)/BoardConfig.mk
 
