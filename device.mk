@@ -9,6 +9,10 @@ $(call inherit-product, $(DASH_HARDWARE_PATH)/dash.mk)
 $(call inherit-product, $(DASH_HARDWARE_PATH)/kernel/device.mk)
 $(call inherit-product, $(DASH_HARDWARE_PATH)/boot/device.mk)
 
+# DisplayFeature V2 must precede both system_server clients for dexpreopt.
+PRODUCT_PACKAGES += dash-displayfeature
+PRODUCT_SYSTEM_SERVER_JARS_EXTRA += system_ext:dash-displayfeature
+
 # Device features
 $(call inherit-product, $(DEVICE_PATH)/fod/fod.mk)
 $(call inherit-product, $(DEVICE_PATH)/display/brightness/brightness.mk)

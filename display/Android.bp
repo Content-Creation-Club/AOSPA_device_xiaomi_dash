@@ -1,0 +1,10 @@
+// Copyright (C) 2026 YorokobiMaster
+// SPDX-License-Identifier: Apache-2.0
+
+java_library {
+    name: "dash-displayfeature",
+    static_libs: ["//hardware/xiaomi/dash:vendor.xiaomi.hardware.displayfeature_aidl-V2-java"],
+    platform_apis: true,
+    system_ext_specific: true,
+    installable: true,
+}
