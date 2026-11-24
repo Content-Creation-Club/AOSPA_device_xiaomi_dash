@@ -81,6 +81,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 
 PRODUCT_PACKAGES += \
     DashFrameworkResOverlay \
+    DashStatusBarHeightOverlay \
     PinnerOverlay \
     DashSettingsOverlay \
     DashSettingsProviderOverlay \

@@ -4,9 +4,7 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources>
-    <!-- Product RRO overrides the retained vendor status bar dimensions.
-         The 152px portrait cutout raises the actual bar above the 28dp baseline. -->
-    <dimen name="status_bar_height_default">28dp</dimen>
+    <!-- Device-specific status bar dimensions. -->
     <dimen name="status_bar_height_portrait">152px</dimen>
     <dimen name="status_bar_height_landscape">152px</dimen>
 </resources>
