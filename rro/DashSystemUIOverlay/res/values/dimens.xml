@@ -6,5 +6,4 @@
     <dimen name="status_bar_clock_starting_padding">0dp</dimen>
     <dimen name="large_screen_shade_header_min_height">152px</dimen>
     <dimen name="qs_header_height">152px</dimen>
-    <dimen name="qs_header_row_min_height">152px</dimen>
 </resources>

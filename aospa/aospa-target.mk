@@ -110,9 +110,7 @@ PRODUCT_COPY_FILES += \
 
 # Gestures
 PRODUCT_PACKAGES += \
-    vendor.aospa.power-service \
-    wake-settings
-PRODUCT_SYSTEM_SERVER_JARS_EXTRA += system_ext:wake-settings
+    vendor.aospa.power-service
 
 # Google - GMS, Pixel, and Mainline Modules
 $(call inherit-product, vendor/google/gms/config.mk)
@@ -149,8 +147,6 @@ PRODUCT_PRODUCT_PROPERTIES += \
     ro.support_one_handed_mode=true
 
 # Overlays
-PRODUCT_PACKAGES += DashWakeGestureOverlay
-
 $(call inherit-product, vendor/aospa/overlay/overlays.mk)
 
 # Overlays (Translations)
