@@ -22,8 +22,10 @@ DASH_KERNEL_WORKSPACE := kernel/xiaomi/dash
 include $(DASH_HARDWARE_PATH)/kernel/BoardConfig.mk
 include $(DASH_HARDWARE_PATH)/boot/BoardConfig.mk
 
+ifneq ($(wildcard vendor/lineage-priv/keys/avb.pk8),)
 BOARD_AVB_KEY_PATH := vendor/lineage-priv/keys/avb.pk8
 BOARD_AVB_ALGORITHM := SHA256_RSA4096
+endif
 
 TARGET_FORCE_PREBUILT_KERNEL := true
 TARGET_PREBUILT_KERNEL := $(PRODUCT_OUT)/kernel

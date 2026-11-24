@@ -30,3 +30,5 @@ PRODUCT_SYSTEM_SERVER_JARS_EXTRA += system_ext:wake-settings
 PRODUCT_NO_CAMERA := true
 
 $(call inherit-product, device/xiaomi/dash/aospa/aospa-target.mk)
+
+$(call inherit-product-if-exists, vendor/lineage-priv/keys/keys.mk)
