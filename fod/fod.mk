@@ -9,5 +9,3 @@ PRODUCT_PACKAGES += \
 PRODUCT_SYSTEM_SERVER_JARS_EXTRA += system_ext:dash-fod
 
 DEVICE_PACKAGE_OVERLAYS += $(DEVICE_PATH)/fod/overlay
-
-# Start DashFodService via device-services.mk.

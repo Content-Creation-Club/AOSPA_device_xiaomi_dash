@@ -15,7 +15,7 @@ java_library {
         "src/me/sandai/dashfod/FodController.java",
     ],
     libs: ["services.core"],
-    static_libs: ["vendor.xiaomi.hardware.fingerprintextension-V1-java"],
+    static_libs: ["//hardware/xiaomi/dash:vendor.xiaomi.hardware.fingerprintextension-V1-java"],
     platform_apis: true,
     system_ext_specific: true,
     installable: true,
