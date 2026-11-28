@@ -63,7 +63,6 @@ public final class RefreshRateService extends Service
         getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.MIN_REFRESH_RATE),
                 false, mRefreshRateObserver);
-        mHandler.post(() -> syncDefaultDisplay(true));
     }
 
     @Override
